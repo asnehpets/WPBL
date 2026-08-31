@@ -185,31 +185,88 @@ function renderAuth(){
         <h1>WPBL</h1>
         <p class="sub">Wall Pickleball League</p>
 
-        <div class="notice">
-          Invite-only league. Use the email address invited by the commissioner.
+        <div id="loginBox">
+          <div class="field">
+            <label>Email</label>
+            <input id="email" type="email" placeholder="you@email.com">
+          </div>
+
+          <div class="field">
+            <label>Password</label>
+            <input id="password" type="password" placeholder="Password">
+          </div>
+
+          <br>
+
+          <button class="btn" style="width:100%" onclick="passwordSignIn()">
+            Sign In
+          </button>
+
+          <br><br>
+
+          <button class="btn ghost" style="width:100%" onclick="showJoinForm()">
+            Join WPBL
+          </button>
+
+          <p id="authMsg" class="tiny muted"></p>
         </div>
 
-        <br>
+        <div id="joinBox" class="hidden">
+          <div class="notice">Create your WPBL account.</div>
 
-        <div class="field">
-          <label>Email</label>
-          <input id="email" type="email" placeholder="you@email.com">
+          <br>
+
+          <div class="field">
+            <label>First Name</label>
+            <input id="joinFirst">
+          </div>
+
+          <div class="field">
+            <label>Last Name</label>
+            <input id="joinLast">
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input id="joinEmail" type="email">
+          </div>
+
+          <div class="field">
+            <label>Create Password</label>
+            <input id="joinPassword" type="password">
+          </div>
+
+          <div class="field">
+            <label>Confirm Password</label>
+            <input id="joinConfirm" type="password">
+          </div>
+
+          <br>
+
+          <button class="btn" style="width:100%" onclick="joinWPBL()">
+            Create Account
+          </button>
+
+          <br><br>
+
+          <button class="btn ghost" style="width:100%" onclick="showLoginForm()">
+            Back to Sign In
+          </button>
+
+          <p id="joinMsg" class="tiny muted"></p>
         </div>
-
-        <div class="field">
-          <label>Password</label>
-          <input id="password" type="password" placeholder="Password">
-        </div>
-
-        <br>
-
-        <button class="btn" style="width:100%" onclick="passwordSignIn()">
-          Sign In
-        </button>
-
-        <p id="authMsg" class="tiny muted"></p>
       </div>
     </div>`;
+}
+
+function showJoinForm(){
+  $("#loginBox").classList.add("hidden");
+  $("#joinBox").classList.remove("hidden");
+}
+
+function showLoginForm(){
+  $("#joinBox").classList.add("hidden");
+  $("#loginBox").classList.remove("hidden");
 }
 
 async function passwordSignIn(){
@@ -224,9 +281,45 @@ async function passwordSignIn(){
 
   msg.textContent="Signing in...";
 
-  const {error}=await sb.auth.signInWithPassword({
+  const {error}=await sb.auth.signInWithPassword({email,password});
+
+  if(error){
+    msg.textContent=error.message;
+    return;
+  }
+}
+
+async function joinWPBL(){
+  const first_name=$("#joinFirst").value.trim();
+  const last_name=$("#joinLast").value.trim();
+  const email=$("#joinEmail").value.trim().toLowerCase();
+  const password=$("#joinPassword").value;
+  const confirm=$("#joinConfirm").value;
+  const msg=$("#joinMsg");
+
+  if(!first_name || !last_name || !email || !password || !confirm){
+    msg.textContent="Complete all fields.";
+    return;
+  }
+
+  if(password.length < 8){
+    msg.textContent="Password must be at least 8 characters.";
+    return;
+  }
+
+  if(password !== confirm){
+    msg.textContent="Passwords do not match.";
+    return;
+  }
+
+  msg.textContent="Creating account...";
+
+  const {data,error}=await sb.auth.signUp({
     email,
-    password
+    password,
+    options:{
+      data:{first_name,last_name}
+    }
   });
 
   if(error){
@@ -234,9 +327,24 @@ async function passwordSignIn(){
     return;
   }
 
-  msg.textContent="Signed in.";
-}
-async function logout(){
+  if(!data.session){
+    msg.textContent="Account created but could not sign in automatically.";
+    return;
+  }
+
+  const {error:joinError}=await sb.rpc("wpbl_join_league",{
+    p_first_name:first_name,
+    p_last_name:last_name
+  });
+
+  if(joinError){
+    msg.textContent=joinError.message;
+    return;
+  }
+
+  session=data.user.id;
+  await reload();
+}async function logout(){
   await sb.auth.signOut();
   session="";
   renderAuth();
