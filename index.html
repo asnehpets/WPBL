@@ -805,8 +805,97 @@ async function invitePlayer(){
   status.textContent="Invitation sent.";
 }
 
+let passwordRecoveryMode =
+  window.location.hash.includes("type=recovery") ||
+  window.location.search.includes("type=recovery");
+
+function renderPasswordRecovery(){
+  document.getElementById("root").innerHTML=`
+    <div class="auth">
+      <div class="authbox">
+        <img class="authlogo" src="${LOGO}">
+        <h1>WPBL</h1>
+        <p class="sub">Wall Pickleball League</p>
+
+        <div class="notice">
+          Create your new WPBL password.
+        </div>
+
+        <br>
+
+        <div class="field">
+          <label>New Password</label>
+          <input id="newPassword" type="password" placeholder="New password">
+        </div>
+
+        <div class="field">
+          <label>Confirm Password</label>
+          <input id="confirmPassword" type="password" placeholder="Confirm password">
+        </div>
+
+        <br>
+
+        <button class="btn" style="width:100%" onclick="saveNewPassword()">
+          Set Password
+        </button>
+
+        <p id="recoveryMsg" class="tiny muted"></p>
+      </div>
+    </div>`;
+}
+
+async function saveNewPassword(){
+  const password=$("#newPassword").value;
+  const confirm=$("#confirmPassword").value;
+  const msg=$("#recoveryMsg");
+
+  if(password.length < 8){
+    msg.textContent="Password must be at least 8 characters.";
+    return;
+  }
+
+  if(password !== confirm){
+    msg.textContent="Passwords do not match.";
+    return;
+  }
+
+  msg.textContent="Saving password...";
+
+  const {error}=await sb.auth.updateUser({
+    password:password
+  });
+
+  if(error){
+    msg.textContent=error.message;
+    return;
+  }
+
+  passwordRecoveryMode=false;
+
+  history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
+
+  await sb.auth.signOut();
+
+  renderAuth();
+}
+
 sb.auth.onAuthStateChange(async(event,s)=>{
   session=s?.user?.id||"";
+
+  if(event==="PASSWORD_RECOVERY"){
+    passwordRecoveryMode=true;
+    renderPasswordRecovery();
+    return;
+  }
+
+  if(passwordRecoveryMode){
+    if(s?.user) renderPasswordRecovery();
+    return;
+  }
 
   if(event==="SIGNED_IN"){
     const {error}=await sb.rpc("wpbl_finish_registration");
@@ -821,7 +910,14 @@ sb.auth.onAuthStateChange(async(event,s)=>{
   if(event==="SIGNED_OUT")renderAuth();
 });
 
-boot();
+if(passwordRecoveryMode){
+  sb.auth.getSession().then(({data})=>{
+    session=data.session?.user?.id||"";
+    renderPasswordRecovery();
+  });
+}else{
+  boot();
+}
   </script>
 </body>
 </html>
