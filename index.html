@@ -781,13 +781,23 @@ async function invitePlayer(){
   status.textContent="Invitation sent.";
 }
 
-sb.auth.onAuthStateChange((event,s)=>{
+sb.auth.onAuthStateChange(async(event,s)=>{
   session=s?.user?.id||"";
-  if(event==="SIGNED_IN")reload();
+
+  if(event==="SIGNED_IN"){
+    const {error}=await sb.rpc("wpbl_finish_registration");
+
+    if(error){
+      console.error("WPBL registration:",error);
+    }
+
+    await reload();
+  }
+
   if(event==="SIGNED_OUT")renderAuth();
 });
 
 boot();
-</script>
+  </script>
 </body>
 </html>
