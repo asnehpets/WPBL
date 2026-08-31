@@ -274,7 +274,8 @@ function renderView(){
   else if(view==="standings") standingsView(el);
   else if(view==="board") boardView(el);
   else if(view==="profile") profileView(el);
-  else moreView(el);
+  else if(view==="admin") adminView(el);
+else moreView(el);
 }
 
 function homeView(el){
@@ -528,6 +529,256 @@ function moreView(el){
           <span class="muted">League management</span>
         </button>`:""}
     </div>`;
+}
+
+  function adminView(el){
+  if(!isAdmin()){
+    go("home");
+    return;
+  }
+
+  const s=season();
+
+  el.innerHTML=`
+    <h1>Admin</h1>
+    <p class="sub">League management</p>
+
+    <div class="card">
+      <h2>Season Settings</h2>
+
+      <div class="field">
+        <label>Season name</label>
+        <input id="adminSeasonName" value="${esc(s?.name||"")}">
+      </div>
+
+      <br>
+
+      <div class="field">
+        <label>League format</label>
+        <select id="adminFormat">
+          <option value="individual" ${s?.format==="individual"?"selected":""}>
+            Individual / Rotating Partners
+          </option>
+          <option value="fixed" ${s?.format==="fixed"?"selected":""}>
+            Fixed Teams
+          </option>
+        </select>
+      </div>
+
+      <br>
+
+      <div class="grid grid2">
+        <div class="field">
+          <label>Games per pairing</label>
+          <input id="adminGames" type="number" value="${s?.games_per_pair||2}">
+        </div>
+
+        <div class="field">
+          <label>Play to</label>
+          <input id="adminTarget" type="number" value="${s?.target||11}">
+        </div>
+
+        <div class="field">
+          <label>Win by</label>
+          <input id="adminWinBy" type="number" value="${s?.win_by||2}">
+        </div>
+
+        <div class="field">
+          <label>RSVP days before</label>
+          <input id="adminRsvp" type="number" value="${s?.rsvp_days||2}">
+        </div>
+      </div>
+
+      <br>
+
+      <button class="btn" onclick="saveAdminSettings()">
+        Save Settings
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>Create League Week</h2>
+
+      <div class="grid grid2">
+        <div class="field">
+          <label>Week number</label>
+          <input id="adminWeekNumber" type="number"
+            value="${Math.max(0,...D.weeks.filter(w=>w.season_id===s?.id).map(w=>w.number))+1}">
+        </div>
+
+        <div class="field">
+          <label>Game date</label>
+          <input id="adminWeekDate" type="date">
+        </div>
+      </div>
+
+      <br>
+
+      <button class="btn" onclick="createAdminWeek()">
+        Create Week
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>Invite Player</h2>
+
+      <div class="grid grid2">
+        <div class="field">
+          <label>First name</label>
+          <input id="inviteFirst">
+        </div>
+
+        <div class="field">
+          <label>Last name</label>
+          <input id="inviteLast">
+        </div>
+      </div>
+
+      <br>
+
+      <div class="field">
+        <label>Email</label>
+        <input id="inviteEmail" type="email">
+      </div>
+
+      <br>
+
+      <label>
+        <input id="inviteSub" type="checkbox" style="width:auto">
+        Substitute player
+      </label>
+
+      <br><br>
+
+      <button class="btn" onclick="invitePlayer()">
+        Send Invitation
+      </button>
+
+      <p id="inviteStatus" class="tiny muted"></p>
+    </div>
+
+    <div class="card">
+      <h2>Current Players</h2>
+
+      ${D.profiles.map(p=>`
+        <div class="item">
+          <b>${esc(pname(p.id))}</b>
+          <div class="tiny muted">
+            ${esc(p.email||"")} • ${esc(p.role||"member")}
+            ${p.is_substitute?" • Substitute":""}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+async function saveAdminSettings(){
+  const s=season();
+
+  const {error}=await sb
+    .from("wpbl_v2_seasons")
+    .update({
+      name:$("#adminSeasonName").value.trim(),
+      format:$("#adminFormat").value,
+      games_per_pair:Number($("#adminGames").value),
+      target:Number($("#adminTarget").value),
+      win_by:Number($("#adminWinBy").value),
+      rsvp_days:Number($("#adminRsvp").value)
+    })
+    .eq("id",s.id);
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  await reload();
+  view="admin";
+  render();
+}
+
+async function createAdminWeek(){
+  const s=season();
+
+  const number=Number($("#adminWeekNumber").value);
+  const game_date=$("#adminWeekDate").value;
+
+  if(!number || !game_date){
+    toast("Enter a week number and game date.");
+    return;
+  }
+
+  const {error}=await sb
+    .from("wpbl_v2_weeks")
+    .insert({
+      season_id:s.id,
+      number,
+      game_date,
+      rsvp_reopened:false
+    });
+
+  if(error){
+    toast(error.message);
+    return;
+  }
+
+  await reload();
+  view="admin";
+  render();
+}
+
+async function invitePlayer(){
+  const first_name=$("#inviteFirst").value.trim();
+  const last_name=$("#inviteLast").value.trim();
+  const email=$("#inviteEmail").value.trim().toLowerCase();
+  const is_substitute=$("#inviteSub").checked;
+  const status=$("#inviteStatus");
+
+  if(!first_name || !last_name || !email){
+    status.textContent="First name, last name and email are required.";
+    return;
+  }
+
+  status.textContent="Creating invitation...";
+
+  const {error:inviteError}=await sb
+    .from("wpbl_v2_invites")
+    .insert({
+      email,
+      first_name,
+      last_name,
+      role:"member",
+      is_substitute,
+      invited_by:session,
+      active:true
+    });
+
+  if(inviteError){
+    status.textContent=inviteError.message;
+    return;
+  }
+
+  status.textContent="Sending invitation email...";
+
+  const {error:authError}=await sb.auth.signInWithOtp({
+    email,
+    options:{
+      shouldCreateUser:true,
+      data:{
+        first_name,
+        last_name
+      },
+      emailRedirectTo:"https://asnehpets.github.io/WPBL/"
+    }
+  });
+
+  if(authError){
+    status.textContent=authError.message;
+    return;
+  }
+
+  status.textContent="Invitation sent.";
 }
 
 sb.auth.onAuthStateChange((event,s)=>{
