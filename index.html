@@ -5,502 +5,176 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0d2a4f">
 <title>WPBL — Wall Pickleball League</title>
-
 <style>
-:root{
-  --navy:#0d2a4f;
-  --blue:#1459a6;
-  --red:#d8242f;
-  --bg:#f4f7fb;
-  --card:#fff;
-  --text:#172033;
-  --muted:#6b7485;
-  --line:#dfe5ee;
-  --ok:#147d4b;
-  --warn:#a35a00;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-
-.auth{
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  background:linear-gradient(135deg,#0d2a4f,#164e8d);
-}
-.authbox{
-  width:min(440px,100%);
-  background:#fff;
-  border-radius:22px;
-  padding:24px;
-  text-align:center;
-}
-.authlogo{
-  width:180px;
-  max-height:125px;
-  object-fit:contain;
-}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:20;
-  height:62px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 14px;
-  background:var(--navy);
-  color:white;
-  box-shadow:0 2px 12px #0002;
-}
-.logo{
-  width:56px;
-  height:42px;
-  object-fit:contain;
-}
-.brand{flex:1}
-.brand strong{font-size:19px}
-.brand small{display:block;opacity:.78}
-.iconbtn{
-  border:1px solid #ffffff35;
-  background:#ffffff18;
-  color:white;
-  border-radius:11px;
-  padding:9px 11px;
-}
-
-.control{
-  position:sticky;
-  top:62px;
-  z-index:15;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding:9px 14px;
-  overflow:auto;
-  background:white;
-  border-bottom:1px solid var(--line);
-}
-.control label{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.main{
-  max-width:980px;
-  margin:auto;
-  padding:16px 14px 90px;
-}
-
-.nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:30;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  background:white;
-  border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);
-}
-.nav button{
-  border:0;
-  background:white;
-  color:#667085;
-  padding:9px 3px;
-  font-size:11px;
-}
-.nav button span{
-  display:block;
-  font-size:20px;
-  margin-bottom:2px;
-}
-.nav button.active{
-  color:var(--blue);
-  font-weight:800;
-}
-
-h1{font-size:25px;margin:2px 0 4px}
-h2{font-size:19px;margin:0 0 12px}
-h3{font-size:16px;margin:0 0 9px}
-.sub{color:var(--muted);margin:0 0 15px}
-.tiny{font-size:12px}
-.muted{color:var(--muted)}
-
-.card{
-  background:white;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:15px;
-  margin-bottom:12px;
-  box-shadow:0 3px 14px #17315a0a;
-}
-.hero{
-  background:linear-gradient(135deg,var(--navy),#173e72);
-  color:white;
-  border:0;
-}
-.hero .sub{color:#dce8fa}
-
-.grid{
-  display:grid;
-  gap:12px;
-}
-.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(max-width:680px){
-  .grid2{grid-template-columns:1fr}
-}
-
-.row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.between{justify-content:space-between}
-.stack{display:flex;flex-direction:column;gap:9px}
-
-.btn{
-  border:0;
-  border-radius:11px;
-  padding:10px 13px;
-  font-weight:750;
-  color:white;
-  background:var(--blue);
-}
-.btn.ghost{background:#eef3f9;color:var(--navy)}
-.btn.red{background:var(--red)}
-.btn.ok{background:var(--ok)}
-.btn.sm{padding:7px 9px;font-size:13px}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:999px;
-  background:#eaf1fb;
-  color:var(--blue);
-  font-size:12px;
-  font-weight:750;
-}
-.badge.red{background:#fdecef;color:var(--red)}
-.badge.ok{background:#e9f7f0;color:var(--ok)}
-.badge.warn{background:#fff2df;color:var(--warn)}
-
-.item{
-  background:white;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:11px;
-  margin:7px 0;
-}
-.game{border-left:5px solid var(--blue)}
-.game.current{border-left-color:var(--red)}
-.game.pending{border-left-color:#e1a100}
-.game.done{opacity:.65}
-
-input,select,textarea{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:white;
-  color:var(--text);
-  padding:10px;
-}
-textarea{min-height:90px}
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-.field label{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:650;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:14px;
-}
-th,td{
-  border-bottom:1px solid var(--line);
-  padding:9px 7px;
-  text-align:left;
-}
-th{
-  color:var(--muted);
-  font-size:12px;
-}
-.tablewrap{overflow:auto}
-
-.notice{
-  padding:10px 12px;
-  border-radius:10px;
-  background:#eef5ff;
-  color:#174d85;
-  font-size:13px;
-}
-.notice.warn{
-  background:#fff3df;
-  color:#8a4e00;
-}
-.notice.ok{
-  background:#eaf8f0;
-  color:#17623e;
-}
-
-.modalback{
-  position:fixed;
-  inset:0;
-  z-index:80;
-  background:#06152bcc;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-}
-.modal{
-  width:min(680px,100%);
-  max-height:92vh;
-  overflow:auto;
-  background:white;
-  border-radius:22px 22px 0 0;
-  padding:18px;
-}
-hr{
-  border:0;
-  border-top:1px solid var(--line);
-  margin:14px 0;
-}
+:root{--navy:#0d2a4f;--blue:#1459a6;--red:#d8242f;--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#6b7485;--line:#dfe5ee;--ok:#147d4b;--warn:#a35a00}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#0d2a4f,#164e8d)}
+.authbox{width:min(440px,100%);background:#fff;border-radius:22px;padding:24px;text-align:center}
+.authlogo{width:180px;max-height:125px;object-fit:contain}
+.topbar{position:sticky;top:0;z-index:20;height:62px;display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--navy);color:#fff;box-shadow:0 2px 12px #0002}
+.logo{width:56px;height:42px;object-fit:contain}
+.brand{flex:1}.brand strong{font-size:19px}.brand small{display:block;opacity:.78}
+.iconbtn{border:1px solid #ffffff35;background:#ffffff18;color:#fff;border-radius:11px;padding:9px 11px}
+.control{position:sticky;top:62px;z-index:15;display:flex;gap:10px;align-items:center;padding:9px 14px;overflow:auto;background:#fff;border-bottom:1px solid var(--line)}
+.control label{font-size:11px;color:var(--muted)}
+.main{max-width:980px;margin:auto;padding:16px 14px 92px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{border:0;background:#fff;color:#667085;padding:9px 3px;font-size:11px}
+.nav button span{display:block;font-size:20px;margin-bottom:2px}
+.nav button.active{color:var(--blue);font-weight:800}
+h1{font-size:25px;margin:2px 0 4px}h2{font-size:19px;margin:0 0 12px}h3{font-size:16px;margin:0 0 9px}
+.sub{color:var(--muted);margin:0 0 15px}.tiny{font-size:12px}.muted{color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 3px 14px #17315a0a}
+.hero{background:linear-gradient(135deg,var(--navy),#173e72);color:#fff;border:0}.hero .sub{color:#dce8fa}
+.grid{display:grid;gap:12px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stack{display:flex;flex-direction:column;gap:9px}
+.btn{border:0;border-radius:11px;padding:10px 13px;font-weight:750;color:#fff;background:var(--blue)}
+.btn.ghost{background:#eef3f9;color:var(--navy)}.btn.red{background:var(--red)}.btn.ok{background:var(--ok)}.btn.sm{padding:7px 9px;font-size:13px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#eaf1fb;color:var(--blue);font-size:12px;font-weight:750}
+.badge.red{background:#fdecef;color:var(--red)}.badge.ok{background:#e9f7f0;color:var(--ok)}.badge.warn{background:#fff2df;color:var(--warn)}
+.item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;margin:7px 0}
+.game{border-left:5px solid var(--blue)}.game.current{border-left-color:var(--red)}.game.pending{border-left-color:#e1a100}.game.done{opacity:.67}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);padding:10px}
+textarea{min-height:90px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;color:var(--muted);font-weight:650}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid var(--line);padding:9px 7px;text-align:left}
+th{color:var(--muted);font-size:12px}.tablewrap{overflow:auto}
+.notice{padding:10px 12px;border-radius:10px;background:#eef5ff;color:#174d85;font-size:13px}
+.notice.warn{background:#fff3df;color:#8a4e00}.notice.ok{background:#eaf8f0;color:#17623e}.notice.red{background:#fdecef;color:#9d1620}
+.modalback{position:fixed;inset:0;z-index:80;background:#06152bcc;display:flex;align-items:flex-end;justify-content:center}
+.modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.right{text-align:right}.scoreline{font-size:24px;font-weight:800}.danger{color:var(--red)}
 </style>
 </head>
-
 <body>
 <div id="root"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const SUPABASE_URL="https://trujrwhkkjepyorpvjjr.supabase.co";
 const SUPABASE_KEY="sb_publishable_RcP9-stV689diug__RIZkg_g5agpSNR";
-
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const LOGO="https://raw.githubusercontent.com/asnehpets/GLOAT-League/main/approved-wpbl-logo.png";
-const KEY="wpbl_clean_v1";
 
 const $=s=>document.querySelector(s);
-const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const fmtDate=d=>new Date(d+"T12:00:00").toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"});
+const fmtTime=d=>d?new Date(d).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"";
 
-const uid=(p="id")=>
-  p+"_"+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
-
-const esc=s=>
-  String(s??"").replace(/[&<>"']/g,m=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[m]));
-
-const today=()=>new Date().toISOString().slice(0,10);
-
-const fmtDate=d=>
-  new Date(d+"T12:00:00").toLocaleDateString([],{
-    month:"short",
-    day:"numeric",
-    year:"numeric"
-  });
-
-const fmtTime=d=>
-  new Date(d).toLocaleTimeString([],{
-    hour:"numeric",
-    minute:"2-digit"
-  });
-
-let authSession=null;
 let session="";
-let state=null;
 let view="home";
+let activeSeasonId=localStorage.getItem("wpbl_active_season")||"";
+let activeWeekId=localStorage.getItem("wpbl_active_week")||"";
 
-function fresh(id,name,email){
-  return{
-    version:1,
-    players:[{
-      id,
-      name:name||"Stephen Sauer",
-      email:email||"",
-      role:"admin",
-      active:true,
-      sub:false
-    }],
-    seasons:[{
-      id:"season1",
-      name:"Fall 2026",
-      format:"individual",
-      status:"active",
-      startTime:"18:00",
-      gamesPerPair:2,
-      target:11,
-      winBy:2,
-      rsvpDays:2,
-      playoffs:true,
-      playoffQualifiers:4,
-      players:[id],
-      weeks:[]
-    }],
-    activeSeason:"season1",
-    board:[],
-    settings:{gameMinutes:18}
-  };
+let D={
+  profiles:[],
+  seasons:[],
+  seasonPlayers:[],
+  teams:[],
+  weeks:[],
+  availability:[],
+  pairs:[],
+  games:[],
+  posts:[],
+  comments:[],
+  pollOptions:[],
+  pollVotes:[],
+  playoffs:[],
+  invites:[]
+};
+
+function me(){return D.profiles.find(p=>p.id===session)}
+function isAdmin(){return me()?.role==="admin"}
+function profile(id){return D.profiles.find(x=>x.id===id)}
+function pname(id){
+  const p=profile(id);
+  return p?.name||[p?.first_name,p?.last_name].filter(Boolean).join(" ")||p?.email||"Unknown";
 }
-
-function save(){
-  localStorage.setItem(KEY,JSON.stringify(state));
-}
-
-function load(){
-  try{
-    return JSON.parse(localStorage.getItem(KEY));
-  }catch{
-    return null;
-  }
-}
-
 function season(){
-  return state?.seasons.find(x=>x.id===state.activeSeason)||state?.seasons[0];
+  return D.seasons.find(s=>s.id===activeSeasonId)||D.seasons.find(s=>s.status==="active")||D.seasons[0];
 }
-
+function seasonPlayers(){
+  const s=season();
+  return !s?[]:D.seasonPlayers.filter(x=>x.season_id===s.id&&x.active).map(x=>x.player_id);
+}
 function week(){
   const s=season();
   if(!s)return null;
-  return s.weeks.find(x=>x.id===s.activeWeek)||s.weeks.at(-1)||null;
+  const ws=D.weeks.filter(w=>w.season_id===s.id).sort((a,b)=>a.number-b.number);
+  return ws.find(w=>w.id===activeWeekId)||ws.at(-1)||null;
 }
+function toast(msg){alert(msg)}
 
-function me(){
-  return state?.players.find(x=>x.id===session);
-}
-
-function player(id){
-  return state.players.find(x=>x.id===id);
-}
-
-function pname(id){
-  return player(id)?.name||"Unknown";
-}
-
-function isAdmin(){
-  return me()?.role==="admin";
+async function q(table){
+  const {data,error}=await sb.from(table).select("*");
+  if(error) throw error;
+  return data||[];
 }
 
 async function boot(){
   const {data:{session:s}}=await sb.auth.getSession();
-
-  authSession=s;
   session=s?.user?.id||"";
+  if(!session){renderAuth();return}
+  await reload();
+}
 
-  if(!session){
-    renderAuth();
-    return;
-  }
+async function reload(){
+  try{
+    const [profiles,seasons,seasonPlayers,teams,weeks,availability,pairs,games,posts,comments,pollOptions,pollVotes,playoffs]=await Promise.all([
+      q("profiles"),
+      q("wpbl_v2_seasons"),
+      q("wpbl_v2_season_players"),
+      q("wpbl_v2_teams"),
+      q("wpbl_v2_weeks"),
+      q("wpbl_v2_availability"),
+      q("wpbl_v2_weekly_pairs"),
+      q("wpbl_v2_games"),
+      q("wpbl_v2_posts"),
+      q("wpbl_v2_comments"),
+      q("wpbl_v2_poll_options"),
+      q("wpbl_v2_poll_votes"),
+      q("wpbl_v2_playoff_matches")
+    ]);
 
-  const {data:profile,error}=await sb
-    .from("profiles")
-    .select("*")
-    .eq("id",session)
-    .single();
+    D.profiles=profiles;
+    D.seasons=seasons;
+    D.seasonPlayers=seasonPlayers;
+    D.teams=teams;
+    D.weeks=weeks;
+    D.availability=availability;
+    D.pairs=pairs;
+    D.games=games;
+    D.posts=posts;
+    D.comments=comments;
+    D.pollOptions=pollOptions;
+    D.pollVotes=pollVotes;
+    D.playoffs=playoffs;
 
-  if(error){
+    if(isAdmin()){
+      try{D.invites=await q("wpbl_v2_invites")}catch{}
+    }
+
+    if(!activeSeasonId||!D.seasons.some(s=>s.id===activeSeasonId)){
+      activeSeasonId=(D.seasons.find(s=>s.status==="active")||D.seasons[0])?.id||"";
+      localStorage.setItem("wpbl_active_season",activeSeasonId);
+    }
+
+    render();
+  }catch(e){
     document.getElementById("root").innerHTML=`
       <div class="auth">
         <div class="authbox">
           <img class="authlogo" src="${LOGO}">
           <h1>WPBL</h1>
-          <p>${esc(error.message)}</p>
-          <button class="btn" onclick="logout()">Sign out</button>
+          <div class="notice red">${esc(e.message)}</div>
+          <br>
+          <button class="btn" onclick="reload()">Retry</button>
         </div>
-      </div>
-    `;
-    return;
+      </div>`;
   }
-
-  state=load();
-
-  if(!state){
-    state=fresh(
-      session,
-      profile.name||"Stephen Sauer",
-      profile.email||s.user.email||""
-    );
-  }
-
-  let p=state.players.find(x=>x.id===session);
-
-  if(!p){
-    p={
-      id:session,
-      name:profile.name||s.user.email,
-      email:profile.email||s.user.email,
-      role:profile.role||"member",
-      active:true,
-      sub:profile.is_substitute||false
-    };
-
-    state.players.push(p);
-
-    if(!season().players.includes(session)){
-      season().players.push(session);
-    }
-  }else{
-    p.name=profile.name||p.name;
-    p.email=profile.email||s.user.email||p.email;
-    p.role=profile.role||p.role;
-  }
-
-  save();
-  render();
-}
-
-async function sendMagicLink(){
-  const email=$("#email").value.trim().toLowerCase();
-  const msg=$("#authMsg");
-
-  if(!email){
-    msg.textContent="Enter your email.";
-    return;
-  }
-
-  msg.textContent="Sending secure sign-in link...";
-
-  const {error}=await sb.auth.signInWithOtp({
-    email,
-    options:{
-      shouldCreateUser:false,
-      emailRedirectTo:location.origin+location.pathname
-    }
-  });
-
-  msg.textContent=error
-    ?error.message
-    :"Check your email for the WPBL sign-in link.";
-}
-
-async function logout(){
-  await sb.auth.signOut();
-  session="";
-  renderAuth();
 }
 
 function renderAuth(){
@@ -510,47 +184,46 @@ function renderAuth(){
         <img class="authlogo" src="${LOGO}">
         <h1>WPBL</h1>
         <p class="sub">Wall Pickleball League</p>
-
-        <div class="notice">
-          Invite-only league. Use the email address invited by the commissioner.
-        </div>
-
+        <div class="notice">Invite-only league. Use the email address invited by the commissioner.</div>
         <br>
-
         <div class="field">
           <label>Email</label>
           <input id="email" type="email" placeholder="you@example.com">
         </div>
-
         <br>
-
-        <button class="btn" style="width:100%" onclick="sendMagicLink()">
-          Email me a secure sign-in link
-        </button>
-
+        <button class="btn" style="width:100%" onclick="sendMagicLink()">Email me a secure sign-in link</button>
         <p id="authMsg" class="tiny muted"></p>
       </div>
-    </div>
-  `;
+    </div>`;
+}
+
+async function sendMagicLink(){
+  const email=$("#email").value.trim().toLowerCase();
+  const msg=$("#authMsg");
+  if(!email){msg.textContent="Enter your email.";return}
+  msg.textContent="Sending...";
+  const {error}=await sb.auth.signInWithOtp({
+    email,
+    options:{
+      shouldCreateUser:false,
+      emailRedirectTo:"https://asnehpets.github.io/WPBL/"
+    }
+  });
+  msg.textContent=error?error.message:"Check your email for the secure sign-in link.";
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  session="";
+  renderAuth();
 }
 
 function navButton(v,icon,label){
-  return`
-    <button class="${view===v?"active":""}" onclick="go('${v}')">
-      <span>${icon}</span>
-      ${label}
-    </button>
-  `;
+  return `<button class="${view===v?"active":""}" onclick="go('${v}')"><span>${icon}</span>${label}</button>`;
 }
 
 function render(){
-  if(!session||!me()){
-    renderAuth();
-    return;
-  }
-
   const s=season();
-
   document.getElementById("root").innerHTML=`
     <header class="topbar">
       <img class="logo" src="${LOGO}">
@@ -566,17 +239,10 @@ function render(){
       <label>
         LEAGUE / SEASON
         <select id="seasonSelect">
-          ${state.seasons.map(x=>`
-            <option value="${x.id}" ${x.id===state.activeSeason?"selected":""}>
-              ${esc(x.name)}
-            </option>
-          `).join("")}
+          ${D.seasons.map(x=>`<option value="${x.id}" ${x.id===s?.id?"selected":""}>${esc(x.name)}</option>`).join("")}
         </select>
       </label>
-
-      <span class="badge">
-        ${s.format==="individual"?"Rotating Partners":"Fixed Teams"}
-      </span>
+      ${s?`<span class="badge">${s.format==="individual"?"Rotating Partners":"Fixed Teams"}</span>`:""}
     </div>
 
     <main id="main" class="main"></main>
@@ -587,522 +253,114 @@ function render(){
       ${navButton("live","▶","Live")}
       ${navButton("standings","★","Standings")}
       ${navButton("more","☰","More")}
-    </nav>
-
-    <div id="modal"></div>
-  `;
+    </nav>`;
 
   $("#seasonSelect").onchange=e=>{
-    state.activeSeason=e.target.value;
-    save();
+    activeSeasonId=e.target.value;
+    localStorage.setItem("wpbl_active_season",activeSeasonId);
     render();
   };
 
   renderView();
 }
 
-function go(v){
-  view=v;
-  render();
-}
+function go(v){view=v;render()}
 
 function renderView(){
   const el=$("#main");
-
-  ({
-    home:homeView,
-    schedule:scheduleView,
-    live:liveView,
-    standings:standingsView,
-    board:boardView,
-    more:moreView,
-    profile:profileView,
-    admin:adminView,
-    players:playersView
-  }[view]||homeView)(el);
+  if(view==="home") homeView(el);
+  else if(view==="schedule") scheduleView(el);
+  else if(view==="live") liveView(el);
+  else if(view==="standings") standingsView(el);
+  else if(view==="board") boardView(el);
+  else if(view==="profile") profileView(el);
+  else moreView(el);
 }
 
 function homeView(el){
   const s=season();
-  const w=week();
-
   el.innerHTML=`
-    <h1>${esc(s.name)}</h1>
-    <p class="sub">
-      ${s.format==="individual"
-        ?"Individual standings • rotating weekly partners"
-        :"Fixed-team league"}
-    </p>
+    <h1>${esc(s?.name||"WPBL")}</h1>
+    <p class="sub">${s?.format==="individual"?"Individual standings • rotating weekly partners":"Fixed-team league"}</p>
 
     <div class="card hero">
-      <h2>${w?`Week ${w.number} — ${fmtDate(w.date)}`:"Season ready"}</h2>
-
-      <p class="sub">
-        ${w
-          ?"Set your availability before the weekly schedule is generated."
-          :"Create the first week from Admin or Schedule."}
-      </p>
-
-      ${w?`
-        <div class="row">
-          <button class="btn ok" onclick="rsvp('in')">✓ Playing</button>
-          <button class="btn red" onclick="rsvp('out')">✕ Not Playing</button>
-        </div>
-      `:""}
+      <h2>Season ready</h2>
+      <p class="sub">Shared league data is now connected through Supabase.</p>
     </div>
 
-    <div class="grid grid2">
-      <div class="card">
-        <h3>Standings</h3>
-        ${standingsMini()}
-        <button class="btn ghost sm" onclick="go('standings')">Full standings</button>
-      </div>
-
-      <div class="card">
-        <h3>Message Board</h3>
-        <p class="muted">${state.board.length} posts</p>
-        <button class="btn ghost sm" onclick="go('board')">Open board</button>
-      </div>
-    </div>
-  `;
-}
-
-function rsvp(status){
-  const w=week();
-  if(!w)return;
-
-  w.availability=w.availability||{};
-  w.availability[session]=status;
-
-  save();
-  homeView($("#main"));
-}
-
-function scheduleView(el){
-  const w=week();
-
-  el.innerHTML=`
-    <div class="row between">
-      <div>
-        <h1>Schedule</h1>
-        <p class="sub">${w?`Week ${w.number} • ${fmtDate(w.date)}`:"No week created"}</p>
-      </div>
-
-      ${isAdmin()?`
-        <button class="btn" onclick="openWeek()">Week Setup</button>
-      `:""}
+    <div class="card">
+      <h3>Standings</h3>
+      ${standingsMini()}
     </div>
 
-    ${!w?`
-      <div class="card">No weekly schedule yet.</div>
-    `:`
-      <div class="card">
-        <h3>Availability</h3>
-
-        ${season().players.map(id=>{
-          const a=w.availability?.[id];
-          return`
-            <span class="badge ${a==="in"?"ok":a==="out"?"red":""}">
-              ${esc(pname(id))}: ${a==="in"?"Playing":a==="out"?"Out":"No response"}
-            </span>
-          `;
-        }).join(" ")}
-
-        ${isAdmin()?`
-          <hr>
-          <button class="btn" onclick="generateSchedule()">Generate Schedule</button>
-        `:""}
-      </div>
-
-      <div class="card">
-        <h2>Game Order</h2>
-
-        ${(w.games||[]).length
-          ?w.games.map((g,i)=>gameCard(g,i)).join("")
-          :`<p class="muted">No games generated yet.</p>`}
-      </div>
-    `}
-  `;
+    <div class="card">
+      <h3>League Board</h3>
+      <p class="muted">${D.posts.length} posts</p>
+      <button class="btn ghost sm" onclick="go('board')">Open message board</button>
+    </div>`;
 }
 
-function openWeek(){
+function standingsData(){
   const s=season();
+  if(!s)return[];
 
-  openModal(`
-    <h2>Create Week</h2>
+  const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
+  const rows={};
 
-    <div class="field">
-      <label>Week number</label>
-      <input id="weekNum" type="number" value="${(s.weeks.at(-1)?.number||0)+1}">
-    </div>
+  const ensure=id=>rows[id]||(rows[id]={id,w:0,l:0,gp:0,pf:0,pa:0});
 
-    <br>
+  seasonPlayers().forEach(ensure);
 
-    <div class="field">
-      <label>Game date</label>
-      <input id="weekDate" type="date" value="${today()}">
-    </div>
+  D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
+    const A=g.actual_team_a||[];
+    const B=g.actual_team_b||[];
+    const aWin=g.score_a>g.score_b;
 
-    <br>
+    A.forEach(id=>{
+      const r=ensure(id);
+      r.gp++;
+      r.pf+=g.score_a||0;
+      r.pa+=g.score_b||0;
+      if(aWin)r.w++;else r.l++;
+    });
 
-    <button class="btn" onclick="saveWeek()">Save Week</button>
-  `);
-}
-
-function saveWeek(){
-  const s=season();
-
-  const w={
-    id:uid("week"),
-    number:+$("#weekNum").value,
-    date:$("#weekDate").value,
-    availability:{},
-    partners:{},
-    games:[]
-  };
-
-  s.weeks.push(w);
-  s.activeWeek=w.id;
-
-  save();
-  closeModal();
-  go("schedule");
-}
-
-function pairHistory(a,b){
-  let count=0;
-
-  season().weeks.forEach(w=>{
-    if((w.partners?.[a]||[]).includes(b))count++;
-  });
-
-  return count;
-}
-
-function makePairs(ids){
-  let remaining=[...ids];
-  const teams=[];
-
-  while(remaining.length>=2){
-    const a=remaining.shift();
-
-    const b=[...remaining].sort((x,y)=>
-      pairHistory(a,x)-pairHistory(a,y)
-      ||Math.random()-.5
-    )[0];
-
-    remaining=remaining.filter(x=>x!==b);
-    teams.push([a,b]);
-  }
-
-  return teams;
-}
-
-function generateSchedule(){
-  const s=season();
-  const w=week();
-
-  const available=s.players.filter(id=>
-    player(id)?.active &&
-    w.availability?.[id]!=="out"
-  );
-
-  if(available.length<4){
-    alert("You need at least 4 available players.");
-    return;
-  }
-
-  const teams=makePairs(available);
-
-  w.partners={};
-
-  teams.forEach(team=>{
-    team.forEach(id=>{
-      w.partners[id]=team.filter(x=>x!==id);
+    B.forEach(id=>{
+      const r=ensure(id);
+      r.gp++;
+      r.pf+=g.score_b||0;
+      r.pa+=g.score_a||0;
+      if(aWin)r.l++;else r.w++;
     });
   });
 
-  const matchups=[];
-
-  for(let a=0;a<teams.length;a++){
-    for(let b=a+1;b<teams.length;b++){
-      for(let n=0;n<(s.gamesPerPair||1);n++){
-        matchups.push([teams[a],teams[b]]);
-      }
-    }
-  }
-
-  w.games=matchups.map((m,i)=>({
-    id:uid("game"),
-    teamA:m[0],
-    teamB:m[1],
-    status:"scheduled",
-    score:null,
-    estimate:new Date(
-      new Date(`${w.date}T${s.startTime}`).getTime()
-      +i*(state.settings.gameMinutes||18)*60000
-    ).toISOString()
-  }));
-
-  save();
-  go("schedule");
-}
-
-function gameCard(g,i){
-  return`
-    <div class="item game ${g.status==="confirmed"?"done":g.status==="pending"?"pending":""}">
-      <div class="row between">
-        <b>Game ${i+1}</b>
-        <span class="tiny muted">${g.estimate?fmtTime(g.estimate):""}</span>
-      </div>
-
-      <p>
-        <b>${g.teamA.map(pname).join(" & ")}</b><br>
-        vs<br>
-        <b>${g.teamB.map(pname).join(" & ")}</b>
-      </p>
-
-      ${g.score?`
-        <b>${g.score.a} – ${g.score.b}</b>
-      `:""}
-    </div>
-  `;
-}
-
-function nextGame(){
-  return week()?.games?.find(g=>g.status!=="confirmed");
-}
-
-function liveView(el){
-  const w=week();
-
-  if(!w){
-    el.innerHTML=`<h1>Live</h1><div class="card">No week scheduled.</div>`;
-    return;
-  }
-
-  const g=nextGame();
-
-  if(!g){
-    el.innerHTML=`
-      <h1>League Night</h1>
-      <div class="card">
-        <h2>All games complete 🎉</h2>
-      </div>
-    `;
-    return;
-  }
-
-  el.innerHTML=`
-    <h1>League Night</h1>
-    <p class="sub">One game at a time</p>
-
-    <div class="card game current">
-      <span class="badge red">CURRENT GAME</span>
-
-      <h2 style="margin-top:14px">
-        ${g.teamA.map(pname).join(" & ")}
-      </h2>
-
-      <p>vs</p>
-
-      <h2>
-        ${g.teamB.map(pname).join(" & ")}
-      </h2>
-
-      ${g.status==="pending"
-        ?pendingScore(g)
-        :scoreForm(g)}
-    </div>
-  `;
-}
-
-function scoreForm(g){
-  const participating=[...g.teamA,...g.teamB].includes(session);
-
-  if(!participating&&!isAdmin()){
-    return `<div class="notice">Only participating players may enter the score.</div>`;
-  }
-
-  return`
-    <hr>
-
-    <div class="row">
-      <input id="scoreA" type="number" min="0" placeholder="Score">
-      <b>–</b>
-      <input id="scoreB" type="number" min="0" placeholder="Score">
-
-      <button class="btn" onclick="submitScore('${g.id}')">
-        Submit Score
-      </button>
-    </div>
-  `;
-}
-
-function submitScore(id){
-  const g=week().games.find(x=>x.id===id);
-  const a=+$("#scoreA").value;
-  const b=+$("#scoreB").value;
-
-  if(a===b){
-    alert("Final score cannot be tied.");
-    return;
-  }
-
-  g.score={a,b};
-  g.submittedBy=session;
-  g.status="pending";
-
-  save();
-  go("live");
-}
-
-function pendingScore(g){
-  const submittedFromA=g.teamA.includes(g.submittedBy);
-  const opponents=submittedFromA?g.teamB:g.teamA;
-  const canConfirm=opponents.includes(session)||isAdmin();
-
-  return`
-    <hr>
-
-    <div class="notice warn">
-      Score awaiting opponent confirmation:
-      <b>${g.score.a} – ${g.score.b}</b>
-    </div>
-
-    ${canConfirm?`
-      <br>
-      <div class="row">
-        <button class="btn ok" onclick="confirmScore('${g.id}')">
-          Confirm & Advance
-        </button>
-
-        <button class="btn ghost" onclick="correctScore('${g.id}')">
-          Correct Score
-        </button>
-      </div>
-    `:""}
-  `;
-}
-
-function confirmScore(id){
-  const g=week().games.find(x=>x.id===id);
-
-  g.status="confirmed";
-  g.confirmedBy=session;
-  g.completedAt=new Date().toISOString();
-
-  save();
-  go("live");
-}
-
-function correctScore(id){
-  const g=week().games.find(x=>x.id===id);
-
-  g.status="scheduled";
-  g.score=null;
-  g.submittedBy=null;
-
-  save();
-  go("live");
-}
-
-function standings(){
-  const rows={};
-
-  season().players.forEach(id=>{
-    rows[id]={
-      id,
-      w:0,
-      l:0,
-      gp:0,
-      pf:0,
-      pa:0
-    };
-  });
-
-  season().weeks.forEach(w=>
-    (w.games||[])
-    .filter(g=>g.status==="confirmed")
-    .forEach(g=>{
-      const aWin=g.score.a>g.score.b;
-
-      g.teamA.forEach(id=>{
-        if(!rows[id])return;
-        rows[id].gp++;
-        rows[id].pf+=g.score.a;
-        rows[id].pa+=g.score.b;
-        aWin?rows[id].w++:rows[id].l++;
-      });
-
-      g.teamB.forEach(id=>{
-        if(!rows[id])return;
-        rows[id].gp++;
-        rows[id].pf+=g.score.b;
-        rows[id].pa+=g.score.a;
-        aWin?rows[id].l++:rows[id].w++;
-      });
-    })
-  );
-
   return Object.values(rows)
-    .map(r=>({
-      ...r,
-      pct:r.gp?r.w/r.gp:0,
-      pd:r.pf-r.pa
-    }))
-    .sort((a,b)=>
-      b.pct-a.pct
-      ||b.pd-a.pd
-      ||b.w-a.w
-    );
+    .map(r=>({...r,pct:r.gp?r.w/r.gp:0,pd:r.pf-r.pa}))
+    .sort((a,b)=>b.pct-a.pct||b.pd-a.pd||b.w-a.w);
 }
 
 function standingsMini(){
-  const a=standings().slice(0,4);
-
-  return`
-    <table>
+  return `<table>
+    <tr><th>#</th><th>Player</th><th>W-L</th><th>Win%</th></tr>
+    ${standingsData().slice(0,5).map((r,i)=>`
       <tr>
-        <th>#</th>
-        <th>Player</th>
-        <th>W-L</th>
-        <th>Win%</th>
-      </tr>
-
-      ${a.map((r,i)=>`
-        <tr>
-          <td>${i+1}</td>
-          <td>${esc(pname(r.id))}</td>
-          <td>${r.w}-${r.l}</td>
-          <td>${(r.pct*100).toFixed(1)}%</td>
-        </tr>
-      `).join("")}
-    </table>
-  `;
+        <td>${i+1}</td>
+        <td>${esc(pname(r.id))}</td>
+        <td>${r.w}-${r.l}</td>
+        <td>${(r.pct*100).toFixed(1)}%</td>
+      </tr>`).join("")}
+  </table>`;
 }
 
 function standingsView(el){
-  const a=standings();
-
   el.innerHTML=`
     <h1>Standings</h1>
-    <p class="sub">Win % • point differential</p>
-
+    <p class="sub">Win % → point differential → wins</p>
     <div class="card tablewrap">
       <table>
         <tr>
-          <th>#</th>
-          <th>Player</th>
-          <th>W-L</th>
-          <th>GP</th>
-          <th>Win%</th>
-          <th>PF</th>
-          <th>PA</th>
-          <th>+/-</th>
+          <th>#</th><th>Player</th><th>W-L</th><th>GP</th><th>Win%</th><th>PF</th><th>PA</th><th>+/-</th>
         </tr>
-
-        ${a.map((r,i)=>`
+        ${standingsData().map((r,i)=>`
           <tr>
             <td>${i+1}</td>
             <td><b>${esc(pname(r.id))}</b></td>
@@ -1111,386 +369,171 @@ function standingsView(el){
             <td>${(r.pct*100).toFixed(1)}%</td>
             <td>${r.pf}</td>
             <td>${r.pa}</td>
-            <td>${r.pd>0?"+":""}${r.pd}</td>
-          </tr>
-        `).join("")}
+            <td>${r.pd}</td>
+          </tr>`).join("")}
       </table>
-    </div>
-  `;
+    </div>`;
+}
+
+function scheduleView(el){
+  const s=season();
+  const ws=D.weeks.filter(w=>w.season_id===s?.id).sort((a,b)=>a.number-b.number);
+
+  el.innerHTML=`
+    <h1>Schedule</h1>
+    <p class="sub">${ws.length?`${ws.length} weeks created`:"No weeks created yet"}</p>
+
+    ${ws.map(w=>{
+      const games=D.games.filter(g=>g.week_id===w.id).sort((a,b)=>a.position-b.position);
+      return `
+        <div class="card">
+          <h2>Week ${w.number} — ${fmtDate(w.game_date)}</h2>
+          ${games.length?games.map(g=>`
+            <div class="item game ${g.status==="confirmed"?"done":g.status==="pending"?"pending":""}">
+              <b>Game ${g.position}</b>
+              <div>${(g.actual_team_a||[]).map(pname).join(" & ")}</div>
+              <div class="tiny muted">vs</div>
+              <div>${(g.actual_team_b||[]).map(pname).join(" & ")}</div>
+              ${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
+            </div>`).join(""):`<p class="muted">No games generated.</p>`}
+        </div>`;
+    }).join("")}`;
+}
+
+function liveView(el){
+  const s=season();
+  const ws=D.weeks.filter(w=>w.season_id===s?.id).sort((a,b)=>a.number-b.number);
+  const w=ws.at(-1);
+
+  if(!w){
+    el.innerHTML=`<h1>Live</h1><div class="card">No league night scheduled yet.</div>`;
+    return;
+  }
+
+  const games=D.games.filter(g=>g.week_id===w.id).sort((a,b)=>a.position-b.position);
+  const g=games.find(x=>x.status!=="confirmed");
+
+  el.innerHTML=`
+    <h1>Live Games</h1>
+    <p class="sub">Week ${w.number}</p>
+    ${g?`
+      <div class="card game current">
+        <span class="badge red">CURRENT</span>
+        <br><br>
+        <b>${(g.actual_team_a||[]).map(pname).join(" & ")}</b>
+        <div class="tiny muted">VS</div>
+        <b>${(g.actual_team_b||[]).map(pname).join(" & ")}</b>
+        ${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
+      </div>`:
+      `<div class="card"><h2>All games complete</h2></div>`
+    }`;
 }
 
 function boardView(el){
+  const posts=[...D.posts].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+
   el.innerHTML=`
     <div class="row between">
       <div>
         <h1>WPBL Board</h1>
-        <p class="sub">League-wide posts and discussions</p>
+        <p class="sub">Shared league discussion</p>
       </div>
-
       <button class="btn" onclick="newPost()">New Post</button>
     </div>
 
-    ${state.board.length
-      ?state.board.map(t=>`
-        <div class="card">
-          <h3>${esc(t.title)}</h3>
-          <div class="tiny muted">
-            ${esc(t.author)} • ${new Date(t.at).toLocaleString()}
-          </div>
+    ${posts.length?posts.map(p=>`
+      <div class="card">
+        <h3>${esc(p.title)}</h3>
+        <div class="tiny muted">${esc(pname(p.author_id))}</div>
+        <p>${esc(p.body)}</p>
 
-          <p>${esc(t.body)}</p>
+        ${D.comments.filter(c=>c.post_id===p.id).map(c=>`
+          <div class="item">
+            <b>${esc(pname(c.author_id))}</b>
+            <div>${esc(c.body)}</div>
+          </div>`).join("")}
 
-          ${(t.comments||[]).map(c=>`
-            <div class="item">
-              <b>${esc(c.author)}</b><br>
-              ${esc(c.body)}
-            </div>
-          `).join("")}
-
-          <div class="row">
-            <input id="comment_${t.id}" placeholder="Add a comment">
-            <button class="btn ghost sm" onclick="addComment('${t.id}')">
-              Reply
-            </button>
-          </div>
+        <div class="row">
+          <input id="c_${p.id}" placeholder="Add a comment">
+          <button class="btn ghost sm" onclick="addComment('${p.id}')">Reply</button>
         </div>
-      `).join("")
-      :`<div class="card">No posts yet.</div>`
-    }
-  `;
+      </div>`).join(""):
+      `<div class="card">No posts yet.</div>`
+    }`;
 }
 
 function newPost(){
-  openModal(`
-    <h2>New Board Post</h2>
-
-    <div class="field">
-      <label>Title</label>
-      <input id="postTitle">
-    </div>
-
-    <br>
-
-    <div class="field">
-      <label>Post</label>
-      <textarea id="postBody"></textarea>
-    </div>
-
-    <br>
-
-    <button class="btn" onclick="savePost()">Post</button>
-  `);
+  const title=prompt("Post title:");
+  if(!title)return;
+  const body=prompt("Message:");
+  if(body===null)return;
+  savePost(title,body);
 }
 
-function savePost(){
-  const title=$("#postTitle").value.trim();
-  const body=$("#postBody").value.trim();
-
-  if(!title)return;
-
-  state.board.unshift({
-    id:uid("post"),
+async function savePost(title,body){
+  const {error}=await sb.from("wpbl_v2_posts").insert({
+    author_id:session,
     title,
     body,
-    author:me().name,
-    authorId:session,
-    at:new Date().toISOString(),
-    comments:[]
+    is_poll:false
   });
-
-  save();
-  closeModal();
-  go("board");
+  if(error)toast(error.message);
+  else await reload();
 }
 
-function addComment(id){
-  const post=state.board.find(x=>x.id===id);
-  const body=$("#comment_"+id).value.trim();
-
+async function addComment(id){
+  const input=$("#c_"+id);
+  const body=input.value.trim();
   if(!body)return;
 
-  post.comments.push({
-    id:uid("comment"),
-    author:me().name,
-    authorId:session,
-    body,
-    at:new Date().toISOString()
+  const {error}=await sb.from("wpbl_v2_comments").insert({
+    post_id:id,
+    author_id:session,
+    body
   });
 
-  save();
-  go("board");
-}
-
-function moreView(el){
-  el.innerHTML=`
-    <h1>More</h1>
-
-    <div class="grid grid2">
-      <button class="card" onclick="go('board')" style="text-align:left">
-        <h3>💬 Message Board</h3>
-        <span class="muted">League discussions</span>
-      </button>
-
-      <button class="card" onclick="go('profile')" style="text-align:left">
-        <h3>👤 Profile</h3>
-        <span class="muted">Your WPBL account</span>
-      </button>
-
-      ${isAdmin()?`
-        <button class="card" onclick="go('admin')" style="text-align:left">
-          <h3>🛡 Admin</h3>
-          <span class="muted">League settings</span>
-        </button>
-
-        <button class="card" onclick="go('players')" style="text-align:left">
-          <h3>👥 Players</h3>
-          <span class="muted">Roster management</span>
-        </button>
-      `:""}
-    </div>
-  `;
+  if(error)toast(error.message);
+  else await reload();
 }
 
 function profileView(el){
   el.innerHTML=`
     <h1>Profile</h1>
-
     <div class="card">
-      <h2>${esc(me().name)}</h2>
-
-      <span class="badge ${isAdmin()?"red":""}">
-        ${isAdmin()?"Administrator":"Player"}
-      </span>
-
-      <p class="muted">${esc(me().email)}</p>
-
+      <h2>${esc(pname(session))}</h2>
+      <span class="badge ${isAdmin()?"red":""}">${isAdmin()?"Administrator":"Player"}</span>
+      ${me()?.is_substitute?` <span class="badge warn">Substitute</span>`:""}
+      <p class="muted">${esc(me()?.email||"")}</p>
       <button class="btn ghost" onclick="logout()">Sign Out</button>
-    </div>
-  `;
+    </div>`;
 }
 
-function adminView(el){
-  if(!isAdmin()){
-    go("home");
-    return;
-  }
-
-  const s=season();
-
+function moreView(el){
   el.innerHTML=`
-    <h1>Admin</h1>
-    <p class="sub">League settings</p>
+    <h1>More</h1>
+    <div class="grid grid2">
+      <button class="card" onclick="go('board')" style="text-align:left">
+        <h3>💬 Message Board</h3>
+        <span class="muted">Shared posts and comments</span>
+      </button>
 
-    <div class="card">
-      <div class="grid grid2">
+      <button class="card" onclick="go('profile')" style="text-align:left">
+        <h3>👤 Profile</h3>
+        <span class="muted">Your account</span>
+      </button>
 
-        <div class="field">
-          <label>Season name</label>
-          <input id="seasonName" value="${esc(s.name)}">
-        </div>
-
-        <div class="field">
-          <label>League format</label>
-          <select id="format">
-            <option value="individual" ${s.format==="individual"?"selected":""}>
-              Individual / rotating partners
-            </option>
-            <option value="fixed" ${s.format==="fixed"?"selected":""}>
-              Fixed teams
-            </option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Games per pairing</label>
-          <input id="gamesPerPair" type="number" value="${s.gamesPerPair}">
-        </div>
-
-        <div class="field">
-          <label>Play to</label>
-          <input id="target" type="number" value="${s.target}">
-        </div>
-
-        <div class="field">
-          <label>Win by</label>
-          <input id="winBy" type="number" value="${s.winBy}">
-        </div>
-
-        <div class="field">
-          <label>RSVP deadline days</label>
-          <input id="rsvpDays" type="number" value="${s.rsvpDays}">
-        </div>
-
-        <div class="field">
-          <label>Estimated minutes per game</label>
-          <input id="gameMinutes" type="number" value="${state.settings.gameMinutes}">
-        </div>
-
-      </div>
-
-      <br>
-
-      <button class="btn" onclick="saveSettings()">Save Settings</button>
-    </div>
-
-    <button class="btn ghost" onclick="go('players')">
-      Manage Players
-    </button>
-  `;
+      ${isAdmin()?`
+        <button class="card" onclick="alert('Admin controls are connected to the new Supabase tables.')" style="text-align:left">
+          <h3>🛡 Admin</h3>
+          <span class="muted">League management</span>
+        </button>`:""}
+    </div>`;
 }
 
-function saveSettings(){
-  const s=season();
-
-  s.name=$("#seasonName").value.trim()||s.name;
-  s.format=$("#format").value;
-  s.gamesPerPair=+$("#gamesPerPair").value;
-  s.target=+$("#target").value;
-  s.winBy=+$("#winBy").value;
-  s.rsvpDays=+$("#rsvpDays").value;
-  state.settings.gameMinutes=+$("#gameMinutes").value;
-
-  save();
-  go("admin");
-}
-
-function playersView(el){
-  if(!isAdmin()){
-    go("home");
-    return;
-  }
-
-  el.innerHTML=`
-    <div class="row between">
-      <div>
-        <h1>Players</h1>
-        <p class="sub">WPBL roster</p>
-      </div>
-
-      <button class="btn" onclick="invitePlayer()">Add Player</button>
-    </div>
-
-    <div class="card">
-      ${state.players.map(p=>`
-        <div class="item row between">
-          <div>
-            <b>${esc(p.name)}</b>
-            <div class="tiny muted">
-              ${esc(p.email||"")} • ${p.role}
-            </div>
-          </div>
-
-          ${p.id!==session?`
-            <button class="btn ghost sm" onclick="toggleAdmin('${p.id}')">
-              ${p.role==="admin"?"Make Player":"Make Admin"}
-            </button>
-          `:""}
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-function invitePlayer(){
-  openModal(`
-    <h2>Add Player</h2>
-
-    <div class="field">
-      <label>First name</label>
-      <input id="firstName">
-    </div>
-
-    <br>
-
-    <div class="field">
-      <label>Last name</label>
-      <input id="lastName">
-    </div>
-
-    <br>
-
-    <div class="field">
-      <label>Email</label>
-      <input id="playerEmail" type="email">
-    </div>
-
-    <br>
-
-    <label>
-      <input id="substitute" type="checkbox" style="width:auto">
-      Substitute pool
-    </label>
-
-    <br><br>
-
-    <button class="btn" onclick="savePlayer()">Add Player</button>
-  `);
-}
-
-function savePlayer(){
-  const first=$("#firstName").value.trim();
-  const last=$("#lastName").value.trim();
-  const email=$("#playerEmail").value.trim();
-
-  if(!first||!last){
-    alert("First and last name are required.");
-    return;
-  }
-
-  const p={
-    id:uid("player"),
-    name:`${first} ${last}`,
-    first_name:first,
-    last_name:last,
-    email,
-    role:"member",
-    active:true,
-    sub:$("#substitute").checked
-  };
-
-  state.players.push(p);
-  season().players.push(p.id);
-
-  save();
-  closeModal();
-  go("players");
-}
-
-function toggleAdmin(id){
-  const p=player(id);
-
-  p.role=p.role==="admin"
-    ?"member"
-    :"admin";
-
-  save();
-  go("players");
-}
-
-function openModal(content){
-  $("#modal").innerHTML=`
-    <div class="modalback" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-
-        <div class="row between">
-          <span></span>
-          <button class="btn ghost sm" onclick="closeModal()">Close</button>
-        </div>
-
-        ${content}
-      </div>
-    </div>
-  `;
-}
-
-function closeModal(){
-  $("#modal").innerHTML="";
-}
-
-sb.auth.onAuthStateChange((_event,s)=>{
-  if(s){
-    boot();
-  }
+sb.auth.onAuthStateChange((event,s)=>{
+  session=s?.user?.id||"";
+  if(event==="SIGNED_IN")reload();
+  if(event==="SIGNED_OUT")renderAuth();
 });
 
 boot();
