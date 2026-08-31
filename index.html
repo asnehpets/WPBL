@@ -184,34 +184,58 @@ function renderAuth(){
         <img class="authlogo" src="${LOGO}">
         <h1>WPBL</h1>
         <p class="sub">Wall Pickleball League</p>
-        <div class="notice">Invite-only league. Use the email address invited by the commissioner.</div>
+
+        <div class="notice">
+          Invite-only league. Use the email address invited by the commissioner.
+        </div>
+
         <br>
+
         <div class="field">
           <label>Email</label>
-          <input id="email" type="email" placeholder="you@example.com">
+          <input id="email" type="email" placeholder="you@email.com">
         </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="Password">
+        </div>
+
         <br>
-        <button class="btn" style="width:100%" onclick="sendMagicLink()">Email me a secure sign-in link</button>
+
+        <button class="btn" style="width:100%" onclick="passwordSignIn()">
+          Sign In
+        </button>
+
         <p id="authMsg" class="tiny muted"></p>
       </div>
     </div>`;
 }
 
-async function sendMagicLink(){
+async function passwordSignIn(){
   const email=$("#email").value.trim().toLowerCase();
+  const password=$("#password").value;
   const msg=$("#authMsg");
-  if(!email){msg.textContent="Enter your email.";return}
-  msg.textContent="Sending...";
-  const {error}=await sb.auth.signInWithOtp({
-    email,
-    options:{
-      shouldCreateUser:false,
-      emailRedirectTo:"https://asnehpets.github.io/WPBL/"
-    }
-  });
-  msg.textContent=error?error.message:"Check your email for the secure sign-in link.";
-}
 
+  if(!email || !password){
+    msg.textContent="Enter your email and password.";
+    return;
+  }
+
+  msg.textContent="Signing in...";
+
+  const {error}=await sb.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if(error){
+    msg.textContent=error.message;
+    return;
+  }
+
+  msg.textContent="Signed in.";
+}
 async function logout(){
   await sb.auth.signOut();
   session="";
