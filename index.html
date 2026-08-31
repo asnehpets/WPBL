@@ -523,7 +523,7 @@ function moreView(el){
       </button>
 
       ${isAdmin()?`
-        <button class="card" onclick="alert('Admin controls are connected to the new Supabase tables.')" style="text-align:left">
+        <button class="card" onclick="go('admin')" style="text-align:left">
           <h3>🛡 Admin</h3>
           <span class="muted">League management</span>
         </button>`:""}
