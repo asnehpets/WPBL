@@ -18,14 +18,25 @@
 <div id="root"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+
 const SUPABASE_URL="https://trujrwhkkjepyorpvjjr.supabase.co";
 const SUPABASE_KEY="sb_publishable_RcP9-stV689diug__RIZkg_g5agpSNR";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
 const LOGO="https://raw.githubusercontent.com/asnehpets/GLOAT-League/main/approved-wpbl-logo.png";
 const JOIN_URL="https://asnehpets.github.io/WPBL/";
 const VAPID_PUBLIC_KEY="BNlrtGK_cGnxX2BrnnNZa0__4-p8SaRk3DFutvtFguJLGKP_hwFByHeBWNtbXd-edtzUUibQ9htkXpX5U9fktGE";
+
 const $=s=>document.querySelector(s);
-const esc=s=>String(s??"").replace(/[&<>\"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+const esc=s=>String(s??"").replace(/[&<>\"']/g,m=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[m]));
+
 const fmtDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"}):"";
 
 let session="";
@@ -52,34 +63,51 @@ playoffs:[]
 function me(){return D.profiles.find(p=>p.id===session)}
 function isAdmin(){return me()?.role==="admin"}
 function profile(id){return D.profiles.find(x=>x.id===id)}
+
 function pname(id){
 const p=profile(id);
 return p?.name||[p?.first_name,p?.last_name].filter(Boolean).join(" ")||p?.email||"Unknown"
 }
+
 function season(){
 return D.seasons.find(s=>s.id===activeSeasonId)||D.seasons.find(s=>s.status==="active")||D.seasons[0]
 }
+
 function splayers(){
 const s=season();
 return s?D.seasonPlayers.filter(x=>x.season_id===s.id&&x.active).map(x=>x.player_id):[]
 }
+
 function weeks(){
 const s=season();
 return s?D.weeks.filter(w=>w.season_id===s.id).sort((a,b)=>a.number-b.number):[]
 }
+
+function currentWeek(){
+const ws=weeks();
+return ws.find(w=>w.id===activeWeekId)||ws.at(-1)||null
+}
+
 function gamesFor(wid){
 return D.games.filter(g=>g.week_id===wid).sort((a,b)=>a.position-b.position)
 }
+
 function availabilityFor(wid,pid=session){
 return D.availability.find(a=>a.week_id===wid&&a.player_id===pid)?.status||""
 }
-function teamText(a){return(a||[]).map(pname).join(" & ")}
-function toast(m){alert(m)}
+
+function teamText(a){
+return(a||[]).map(pname).join(" & ")
+}
+
+function toast(m){
+alert(m)
+}
 
 async function q(t){
 const{data,error}=await sb.from(t).select("*");
 if(error)throw error;
-return data||[];
+return data||[]
 }
 
 async function reload(){
@@ -155,68 +183,27 @@ document.getElementById("root").innerHTML=`
 <p class="sub">Wall Pickleball League</p>
 
 <div id="loginBox">
-<div class="field">
-<label>Email</label>
-<input id="email" type="email">
-</div>
-
-<div class="field">
-<label>Password</label>
-<input id="password" type="password">
-</div>
-
+<div class="field"><label>Email</label><input id="email" type="email"></div>
+<div class="field"><label>Password</label><input id="password" type="password"></div>
 <br>
-
 <button class="btn" style="width:100%" onclick="passwordSignIn()">Sign In</button>
-
 <br><br>
-
 <button class="btn ghost" style="width:100%" onclick="showJoinForm()">Join WPBL</button>
-
 <p id="authMsg" class="tiny muted"></p>
 </div>
 
 <div id="joinBox" class="hidden">
-
-<div class="notice">Create your WPBL account.</div>
-
+<div class="notice">Create your WPBL account.</div><br>
+<div class="field"><label>First Name</label><input id="joinFirst"></div>
+<div class="field"><label>Last Name</label><input id="joinLast"></div>
+<div class="field"><label>Email</label><input id="joinEmail" type="email"></div>
+<div class="field"><label>Create Password</label><input id="joinPassword" type="password"></div>
+<div class="field"><label>Confirm Password</label><input id="joinConfirm" type="password"></div>
 <br>
-
-<div class="field">
-<label>First Name</label>
-<input id="joinFirst">
-</div>
-
-<div class="field">
-<label>Last Name</label>
-<input id="joinLast">
-</div>
-
-<div class="field">
-<label>Email</label>
-<input id="joinEmail" type="email">
-</div>
-
-<div class="field">
-<label>Create Password</label>
-<input id="joinPassword" type="password">
-</div>
-
-<div class="field">
-<label>Confirm Password</label>
-<input id="joinConfirm" type="password">
-</div>
-
-<br>
-
 <button class="btn" style="width:100%" onclick="joinWPBL()">Create Account</button>
-
 <br><br>
-
 <button class="btn ghost" style="width:100%" onclick="showLoginForm()">Back to Sign In</button>
-
 <p id="joinMsg" class="tiny muted"></p>
-
 </div>
 </div>
 </div>`;
@@ -224,12 +211,12 @@ document.getElementById("root").innerHTML=`
 
 function showJoinForm(){
 $("#loginBox").classList.add("hidden");
-$("#joinBox").classList.remove("hidden");
+$("#joinBox").classList.remove("hidden")
 }
 
 function showLoginForm(){
 $("#joinBox").classList.add("hidden");
-$("#loginBox").classList.remove("hidden");
+$("#loginBox").classList.remove("hidden")
 }
 
 async function passwordSignIn(){
@@ -284,6 +271,14 @@ p_last_name:last_name
 if(joinError)return msg.textContent=joinError.message;
 
 session=data.user.id;
+
+/* Trigger admin signup push */
+try{
+await sb.functions.invoke("notify-signup",{body:{}});
+}catch(e){
+console.error("Signup notification:",e);
+}
+
 await reload();
 }
 
@@ -296,8 +291,7 @@ renderAuth();
 function navButton(v,icon,label){
 return`
 <button class="${view===v?"active":""}" onclick="go('${v}')">
-<span>${icon}</span>
-${label}
+<span>${icon}</span>${label}
 </button>`;
 }
 
@@ -306,39 +300,22 @@ const s=season();
 
 document.getElementById("root").innerHTML=`
 <header class="topbar">
-
 <img class="logo" src="${LOGO}">
-
 <div class="brand">
 <strong>WPBL</strong>
 <small>Wall Pickleball League</small>
 </div>
-
 <button class="iconbtn" onclick="go('board')">💬</button>
 <button class="iconbtn" onclick="go('profile')">👤</button>
-
 </header>
 
 <div class="control">
-
-<label>
-LEAGUE / SEASON
-
+<label>LEAGUE / SEASON
 <select id="seasonSelect">
-${D.seasons.map(x=>`
-<option value="${x.id}" ${x.id===s?.id?"selected":""}>
-${esc(x.name)}
-</option>
-`).join("")}
+${D.seasons.map(x=>`<option value="${x.id}" ${x.id===s?.id?"selected":""}>${esc(x.name)}</option>`).join("")}
 </select>
 </label>
-
-${s?`
-<span class="badge">
-${s.format==="individual"?"Rotating Partners":"Fixed Teams"}
-</span>
-`:""}
-
+${s?`<span class="badge">${s.format==="individual"?"Rotating Partners":"Fixed Teams"}</span>`:""}
 </div>
 
 <main id="main" class="main"></main>
@@ -384,22 +361,15 @@ function headToHead(a,b){
 const s=season();
 if(!s)return 0;
 
-const weekIds=new Set(
-D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id)
-);
+const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
 
 let aw=0,bw=0;
 
-D.games
-.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed")
-.forEach(g=>{
+D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
 const A=g.actual_team_a||[];
 const B=g.actual_team_b||[];
 
-const opposed=
-(A.includes(a)&&B.includes(b))||
-(A.includes(b)&&B.includes(a));
-
+const opposed=(A.includes(a)&&B.includes(b))||(A.includes(b)&&B.includes(a));
 if(!opposed)return;
 
 const aOnA=A.includes(a);
@@ -416,19 +386,14 @@ function standingsData(){
 const s=season();
 if(!s)return[];
 
-const weekIds=new Set(
-D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id)
-);
-
+const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
 const rows={};
 
 const ensure=id=>rows[id]||(rows[id]={id,w:0,l:0,gp:0,pf:0,pa:0});
 
 splayers().forEach(ensure);
 
-D.games
-.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed")
-.forEach(g=>{
+D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
 const A=g.actual_team_a||[];
 const B=g.actual_team_b||[];
 const aWin=g.score_a>g.score_b;
@@ -456,12 +421,9 @@ return Object.values(rows)
 .map(r=>({...r,pct:r.gp?r.w/r.gp:0,pd:r.pf-r.pa}))
 .sort((a,b)=>{
 if(b.pct!==a.pct)return b.pct-a.pct;
-
 const h=headToHead(a.id,b.id);
 if(h!==0)return-h;
-
 if(b.pd!==a.pd)return b.pd-a.pd;
-
 return b.w-a.w;
 });
 }
@@ -469,21 +431,14 @@ return b.w-a.w;
 function standingsMini(){
 return`
 <table>
-<tr>
-<th>#</th>
-<th>Player</th>
-<th>W-L</th>
-<th>Win%</th>
-</tr>
-
+<tr><th>#</th><th>Player</th><th>W-L</th><th>Win%</th></tr>
 ${standingsData().slice(0,5).map((r,i)=>`
 <tr>
 <td>${i+1}</td>
 <td>${esc(pname(r.id))}</td>
 <td>${r.w}-${r.l}</td>
 <td>${(r.pct*100).toFixed(1)}%</td>
-</tr>
-`).join("")}
+</tr>`).join("")}
 </table>`;
 }
 
@@ -493,21 +448,11 @@ const w=weeks().at(-1);
 
 el.innerHTML=`
 <h1>${esc(s?.name||"WPBL")}</h1>
-
-<p class="sub">
-${s?.format==="individual"
-?"Individual standings • rotating weekly partners"
-:"Fixed-team league"}
-</p>
+<p class="sub">${s?.format==="individual"?"Individual standings • rotating weekly partners":"Fixed-team league"}</p>
 
 <div class="card hero">
 <h2>Wall Pickleball League</h2>
-
-<p class="sub">
-${w
-?`Next league week: Week ${w.number} — ${fmtDate(w.game_date)}`
-:"Season ready"}
-</p>
+<p class="sub">${w?`Next league week: Week ${w.number} — ${fmtDate(w.game_date)}`:"Season ready"}</p>
 </div>
 
 <div class="card">
@@ -518,35 +463,18 @@ ${standingsMini()}
 <div class="card">
 <h3>League Board</h3>
 <p class="muted">${D.posts.length} posts</p>
-
-<button class="btn ghost sm" onclick="go('board')">
-Open message board
-</button>
+<button class="btn ghost sm" onclick="go('board')">Open message board</button>
 </div>`;
 }
 
 function standingsView(el){
 el.innerHTML=`
 <h1>Standings</h1>
-
-<p class="sub">
-Win % → head-to-head → point differential
-</p>
+<p class="sub">Win % → head-to-head → point differential</p>
 
 <div class="card tablewrap">
 <table>
-
-<tr>
-<th>#</th>
-<th>Player</th>
-<th>W-L</th>
-<th>GP</th>
-<th>Win%</th>
-<th>PF</th>
-<th>PA</th>
-<th>+/-</th>
-</tr>
-
+<tr><th>#</th><th>Player</th><th>W-L</th><th>GP</th><th>Win%</th><th>PF</th><th>PA</th><th>+/-</th></tr>
 ${standingsData().map((r,i)=>`
 <tr>
 <td>${i+1}</td>
@@ -557,9 +485,7 @@ ${standingsData().map((r,i)=>`
 <td>${r.pf}</td>
 <td>${r.pa}</td>
 <td>${r.pd}</td>
-</tr>
-`).join("")}
-
+</tr>`).join("")}
 </table>
 </div>`;
 }
@@ -572,16 +498,10 @@ p_status:status
 
 if(error)return toast(error.message);
 
-const existing=D.availability.find(
-a=>a.week_id===wid&&a.player_id===session
-);
+const existing=D.availability.find(a=>a.week_id===wid&&a.player_id===session);
 
 if(existing)existing.status=status;
-else D.availability.push({
-week_id:wid,
-player_id:session,
-status
-});
+else D.availability.push({week_id:wid,player_id:session,status});
 
 render();
 reload();
@@ -592,10 +512,7 @@ const ws=weeks();
 
 el.innerHTML=`
 <h1>Schedule</h1>
-
-<p class="sub">
-${ws.length?`${ws.length} weeks created`:"No weeks created yet"}
-</p>
+<p class="sub">${ws.length?`${ws.length} weeks created`:"No weeks created yet"}</p>
 
 ${ws.map(w=>{
 const games=gamesFor(w.id);
@@ -603,57 +520,32 @@ const av=availabilityFor(w.id);
 
 return`
 <div class="card">
-
 <div class="row between">
-
 <div>
 <h2>Week ${w.number} — ${fmtDate(w.game_date)}</h2>
-
-<div class="tiny muted">
-Your RSVP:
-${av==="in"?"Playing":av==="out"?"Not Playing":"Not set"}
-</div>
+<div class="tiny muted">Your RSVP: ${av==="in"?"Playing":av==="out"?"Not Playing":"Not set"}</div>
 </div>
 
 <div class="row">
-
-<button class="btn ok sm" onclick="setAvailability('${w.id}','in')">
-Playing
-</button>
-
-<button class="btn red sm" onclick="setAvailability('${w.id}','out')">
-Not Playing
-</button>
-
+<button class="btn ok sm" onclick="setAvailability('${w.id}','in')">Playing</button>
+<button class="btn red sm" onclick="setAvailability('${w.id}','out')">Not Playing</button>
 </div>
 </div>
 
-${games.length
-?games.map(g=>`
+${games.length?games.map(g=>`
 <div class="item game ${g.status==="confirmed"?"done":g.status==="pending"?"pending":""}">
-
 <b>Game ${g.position}</b>
-
 <div>${esc(teamText(g.actual_team_a))}</div>
 <div class="tiny muted">vs</div>
 <div>${esc(teamText(g.actual_team_b))}</div>
-
-${g.score_a!=null
-?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`
-:""}
-
-</div>
-`).join("")
-:`<p class="muted">Matchups not generated yet.</p>`}
-
+${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
+</div>`).join(""):`<p class="muted">Matchups not generated yet.</p>`}
 </div>`;
 }).join("")}`;
 }
 
 function canSubmit(g){
-return isAdmin()||
-(g.actual_team_a||[]).includes(session)||
-(g.actual_team_b||[]).includes(session);
+return isAdmin()||(g.actual_team_a||[]).includes(session)||(g.actual_team_b||[]).includes(session);
 }
 
 function canConfirm(g){
@@ -673,11 +565,7 @@ function liveView(el){
 const w=weeks().at(-1);
 
 if(!w){
-el.innerHTML=`
-<h1>Live</h1>
-<div class="card">
-No league night scheduled yet.
-</div>`;
+el.innerHTML=`<h1>Live</h1><div class="card">No league night scheduled yet.</div>`;
 return;
 }
 
@@ -688,17 +576,11 @@ const next=index>=0?games[index+1]:null;
 
 el.innerHTML=`
 <h1>Live Games</h1>
-
-<p class="sub">
-Week ${w.number} — ${fmtDate(w.game_date)}
-</p>
+<p class="sub">Week ${w.number} — ${fmtDate(w.game_date)}</p>
 
 ${g?`
 <div class="card game current">
-
-<span class="badge red">CURRENT</span>
-
-<br><br>
+<span class="badge red">CURRENT</span><br><br>
 
 <div class="teamline">${esc(teamText(g.actual_team_a))}</div>
 <div class="tiny muted">VS</div>
@@ -706,113 +588,50 @@ ${g?`
 
 ${g.status==="scheduled"&&canSubmit(g)?`
 <br>
-
 <div class="grid grid2">
-
-<div class="field">
-<label>Team A Score</label>
-<input id="scoreA" type="number">
+<div class="field"><label>Team A Score</label><input id="scoreA" type="number"></div>
+<div class="field"><label>Team B Score</label><input id="scoreB" type="number"></div>
 </div>
-
-<div class="field">
-<label>Team B Score</label>
-<input id="scoreB" type="number">
-</div>
-
-</div>
-
 <br>
-
-<button class="btn" onclick="submitScore('${g.id}')">
-Submit Score
-</button>
-`:""}
+<button class="btn" onclick="submitScore('${g.id}')">Submit Score</button>`:""}
 
 ${g.status==="pending"?`
 <div class="scoreline">${g.score_a}–${g.score_b}</div>
-
-<div class="notice">
-Waiting for score confirmation.
-</div>
-
-<br>
-
-${canConfirm(g)?`
-<button class="btn ok" onclick="confirmScore('${g.id}')">
-Confirm Score
-</button>
-`:""}
-
-${isAdmin()?`
-<button class="btn ghost" onclick="reopenScore('${g.id}')">
-Reopen / Correct
-</button>
-`:""}
+<div class="notice">Waiting for score confirmation.</div><br>
+${canConfirm(g)?`<button class="btn ok" onclick="confirmScore('${g.id}')">Confirm Score</button>`:""}
+${isAdmin()?`<button class="btn ghost" onclick="reopenScore('${g.id}')">Reopen / Correct</button>`:""}
 `:""}
 
 ${isAdmin()&&g.status==="scheduled"?`
 <br>
-<button class="btn ghost sm" onclick="editPlayers('${g.id}')">
-Change Players / Substitute
-</button>
-`:""}
-
+<button class="btn ghost sm" onclick="editPlayers('${g.id}')">Change Players / Substitute</button>`:""}
 </div>
-`:
-`<div class="card">
-<h2>All games complete</h2>
-</div>`}
+`:`<div class="card"><h2>All games complete</h2></div>`}
 
 ${next?`
 <div class="card">
-
-<span class="badge">ON DECK</span>
-
-<br><br>
-
+<span class="badge">ON DECK</span><br><br>
 <b>${esc(teamText(next.actual_team_a))}</b>
-
 <div class="tiny muted">vs</div>
-
 <b>${esc(teamText(next.actual_team_b))}</b>
-
-</div>
-`:""}
+</div>`:""}
 
 <div class="card">
-
 <h3>Game Order</h3>
 
 ${games.map(x=>`
 <div class="item">
-
-<b>Game ${x.position}</b>
-—
-${esc(teamText(x.actual_team_a))}
-vs
-${esc(teamText(x.actual_team_b))}
-
-${x.status==="confirmed"
-?` • ${x.score_a}-${x.score_b}`
-:""}
+<b>Game ${x.position}</b> —
+${esc(teamText(x.actual_team_a))} vs ${esc(teamText(x.actual_team_b))}
+${x.status==="confirmed"?` • ${x.score_a}-${x.score_b}`:""}
 
 ${isAdmin()&&x.status==="scheduled"?`
 <div class="row" style="margin-top:7px">
-
 <button class="btn ghost sm" onclick="moveGame('${x.id}',-1)">↑</button>
-
 <button class="btn ghost sm" onclick="moveGame('${x.id}',1)">↓</button>
-
-<button class="btn ghost sm" onclick="editPlayers('${x.id}')">
-Players/Sub
-</button>
-
-</div>
-`:""}
-
-</div>
-`).join("")}
-
+<button class="btn ghost sm" onclick="editPlayers('${x.id}')">Players/Sub</button>
+</div>`:""}
+</div>`).join("")}
 </div>`;
 }
 
@@ -831,18 +650,14 @@ else await reload();
 }
 
 async function confirmScore(id){
-const{error}=await sb.rpc("wpbl_v2_confirm_score",{
-p_game_id:id
-});
+const{error}=await sb.rpc("wpbl_v2_confirm_score",{p_game_id:id});
 
 if(error)toast(error.message);
 else await reload();
 }
 
 async function reopenScore(id){
-const{error}=await sb.rpc("wpbl_v2_reopen_score",{
-p_game_id:id
-});
+const{error}=await sb.rpc("wpbl_v2_reopen_score",{p_game_id:id});
 
 if(error)toast(error.message);
 else await reload();
@@ -888,17 +703,10 @@ const n=Number(prompt(`${label}\n\n${names}`,currentIndex));
 return roster[n-1];
 };
 
-const a1=choose("Team A — Player 1",current[0]);
-if(!a1)return;
-
-const a2=choose("Team A — Player 2",current[1]);
-if(!a2)return;
-
-const b1=choose("Team B — Player 1",current[2]);
-if(!b1)return;
-
-const b2=choose("Team B — Player 2",current[3]);
-if(!b2)return;
+const a1=choose("Team A — Player 1",current[0]);if(!a1)return;
+const a2=choose("Team A — Player 2",current[1]);if(!a2)return;
+const b1=choose("Team B — Player 1",current[2]);if(!b1)return;
+const b2=choose("Team B — Player 2",current[3]);if(!b2)return;
 
 const{error}=await sb.rpc("wpbl_v2_set_actual_players",{
 p_game_id:id,
@@ -911,94 +719,54 @@ else await reload();
 }
 
 function boardView(el){
-const posts=[...D.posts].sort(
-(a,b)=>new Date(b.created_at)-new Date(a.created_at)
-);
+const posts=[...D.posts].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
 
 el.innerHTML=`
 <div class="row between">
-
 <div>
 <h1>WPBL Board</h1>
 <p class="sub">League discussion</p>
 </div>
 
 <div class="row">
-
-<button class="btn ghost" onclick="newPoll()">
-New Poll
-</button>
-
-<button class="btn" onclick="newPost()">
-New Post
-</button>
-
+<button class="btn ghost" onclick="newPoll()">New Poll</button>
+<button class="btn" onclick="newPost()">New Post</button>
 </div>
 </div>
 
-${posts.length
-?posts.map(p=>{
-const opts=D.pollOptions
-.filter(o=>o.post_id===p.id)
-.sort((a,b)=>a.position-b.position);
-
+${posts.length?posts.map(p=>{
+const opts=D.pollOptions.filter(o=>o.post_id===p.id).sort((a,b)=>a.position-b.position);
 const votes=D.pollVotes.filter(v=>v.post_id===p.id);
 const myVote=votes.find(v=>v.player_id===session);
 
 return`
 <div class="card">
-
 <h3>${esc(p.title)}</h3>
-
 <div class="tiny muted">${esc(pname(p.author_id))}</div>
-
 <p>${esc(p.body)}</p>
 
-${p.is_poll
-?opts.map(o=>{
+${p.is_poll?opts.map(o=>{
 const n=votes.filter(v=>v.option_id===o.id).length;
 
 return`
 <div class="item row between">
-
-<span>
-${esc(o.option_text)} —
-${n} vote${n===1?"":"s"}
-</span>
-
-<button class="btn ${myVote?.option_id===o.id?"ok":"ghost"} sm"
-onclick="votePoll('${p.id}','${o.id}')">
-
-${myVote?.option_id===o.id?"Voted":"Vote"}
-
-</button>
-
+<span>${esc(o.option_text)} — ${n} vote${n===1?"":"s"}</span>
+<button class="btn ${myVote?.option_id===o.id?"ok":"ghost"} sm" onclick="votePoll('${p.id}','${o.id}')">${myVote?.option_id===o.id?"Voted":"Vote"}</button>
 </div>`;
-}).join("")
-:""}
+}).join(""):""}
 
-${D.comments
-.filter(c=>c.post_id===p.id)
-.map(c=>`
+${D.comments.filter(c=>c.post_id===p.id).map(c=>`
 <div class="item">
 <b>${esc(pname(c.author_id))}</b>
 <div>${esc(c.body)}</div>
-</div>
-`).join("")}
+</div>`).join("")}
 
 <div class="row">
-
 <input id="c_${p.id}" placeholder="Add a comment">
-
-<button class="btn ghost sm" onclick="addComment('${p.id}')">
-Reply
-</button>
-
+<button class="btn ghost sm" onclick="addComment('${p.id}')">Reply</button>
 </div>
 </div>`;
-}).join("")
-:`<div class="card">No posts yet.</div>`}
-`;
+}).join(""):`<div class="card">No posts yet.</div>`}`;
 }
 
 function newPost(){
@@ -1032,8 +800,7 @@ if(!raw)return;
 
 const options=raw.split(",").map(x=>x.trim()).filter(Boolean);
 
-if(options.length<2)
-return toast("Enter at least two choices.");
+if(options.length<2)return toast("Enter at least two choices.");
 
 const{data,error}=await sb.from("wpbl_v2_posts").insert({
 author_id:session,
@@ -1069,7 +836,6 @@ else await reload();
 async function addComment(id){
 const input=$("#c_"+id);
 const body=input.value.trim();
-
 if(!body)return;
 
 const{error}=await sb.from("wpbl_v2_comments").insert({
@@ -1085,25 +851,18 @@ else await reload();
 function profileView(el){
 el.innerHTML=`
 <h1>Profile</h1>
-
 <div class="card">
-
 <h2>${esc(pname(session))}</h2>
 
 <span class="badge ${isAdmin()?"red":""}">
 ${isAdmin()?"Administrator":"Player"}
 </span>
 
-${me()?.is_substitute
-?` <span class="badge warn">Substitute</span>`
-:""}
+${me()?.is_substitute?` <span class="badge warn">Substitute</span>`:""}
 
 <p class="muted">${esc(me()?.email||"")}</p>
 
-<button class="btn ghost" onclick="logout()">
-Sign Out
-</button>
-
+<button class="btn ghost" onclick="logout()">Sign Out</button>
 </div>`;
 }
 
@@ -1129,7 +888,6 @@ el.innerHTML=`
 </button>
 
 ${isAdmin()?`
-
 <button class="card" onclick="go('teams')" style="text-align:left">
 <h3>👥 Teams</h3>
 <span class="muted">Fixed-team setup</span>
@@ -1138,9 +896,7 @@ ${isAdmin()?`
 <button class="card" onclick="go('admin')" style="text-align:left">
 <h3>🛡 Admin</h3>
 <span class="muted">League management</span>
-</button>
-
-`:""}
+</button>`:""}
 
 </div>`;
 }
@@ -1148,51 +904,33 @@ ${isAdmin()?`
 function playoffsView(el){
 const s=season();
 
-const ms=D.playoffs
-.filter(x=>x.season_id===s?.id)
-.sort((a,b)=>a.round-b.round||a.position-b.position);
+const ms=D.playoffs.filter(x=>x.season_id===s?.id).sort((a,b)=>a.round-b.round||a.position-b.position);
 
 el.innerHTML=`
 <div class="row between">
-
 <div>
 <h1>Playoffs</h1>
 <p class="sub">${s?.playoffs?"Enabled":"Disabled"}</p>
 </div>
 
-${isAdmin()&&s?.playoffs
-?`<button class="btn" onclick="generatePlayoffs()">Generate Bracket</button>`
-:""}
-
+${isAdmin()&&s?.playoffs?`<button class="btn" onclick="generatePlayoffs()">Generate Bracket</button>`:""}
 </div>
 
-${ms.length
-?ms.map(m=>`
+${ms.length?ms.map(m=>`
 <div class="card">
-
 <span class="badge">Round ${m.round}</span>
-
 <h3>
-${m.seed_a?`#${m.seed_a} `:""}
-${esc(pname(m.player_a))}
+${m.seed_a?`#${m.seed_a} `:""}${esc(pname(m.player_a))}
 vs
-${m.seed_b?`#${m.seed_b} `:""}
-${esc(pname(m.player_b))}
+${m.seed_b?`#${m.seed_b} `:""}${esc(pname(m.player_b))}
 </h3>
-
-</div>
-`).join("")
-:`<div class="card">No playoff bracket yet.</div>`}
-`;
+</div>`).join(""):`<div class="card">No playoff bracket yet.</div>`}`;
 }
 
 async function generatePlayoffs(){
 const s=season();
 
-const n=Math.min(
-Number(s.playoff_qualifiers||4),
-standingsData().length
-);
+const n=Math.min(Number(s.playoff_qualifiers||4),standingsData().length);
 
 if(n<2)return toast("Not enough players.");
 
@@ -1221,39 +959,22 @@ else await reload();
 }
 
 function playerOptions(){
-return splayers()
-.map(id=>`
-<option value="${id}">
-${esc(pname(id))}
-</option>
-`)
-.join("");
+return splayers().map(id=>`<option value="${id}">${esc(pname(id))}</option>`).join("");
 }
 
 function teamsView(el){
 const s=season();
-
-const ts=D.teams.filter(
-t=>t.season_id===s?.id&&t.active
-);
+const ts=D.teams.filter(t=>t.season_id===s?.id&&t.active);
 
 el.innerHTML=`
 <h1>Fixed Teams</h1>
 
 <div class="card">
-
 <h3>Create Team</h3>
 
 <div class="grid grid2">
-
-<select id="t1">
-${playerOptions()}
-</select>
-
-<select id="t2">
-${playerOptions()}
-</select>
-
+<select id="t1">${playerOptions()}</select>
+<select id="t2">${playerOptions()}</select>
 </div>
 
 <br>
@@ -1262,40 +983,23 @@ ${playerOptions()}
 
 <br><br>
 
-<button class="btn" onclick="createTeam()">
-Create Team
-</button>
-
+<button class="btn" onclick="createTeam()">Create Team</button>
 </div>
 
 ${ts.map(t=>`
 <div class="card">
-
 <h3>${esc(t.name||teamText([t.player1,t.player2]))}</h3>
-
-<div>
-${esc(pname(t.player1))}
-&
-${esc(pname(t.player2))}
-</div>
-
+<div>${esc(pname(t.player1))} & ${esc(pname(t.player2))}</div>
 <br>
-
-<button class="btn red sm" onclick="deleteTeam('${t.id}')">
-Remove
-</button>
-
-</div>
-`).join("")}
-`;
+<button class="btn red sm" onclick="deleteTeam('${t.id}')">Remove</button>
+</div>`).join("")}`;
 }
 
 async function createTeam(){
 const p1=$("#t1").value;
 const p2=$("#t2").value;
 
-if(!p1||!p2||p1===p2)
-return toast("Choose two different players.");
+if(!p1||!p2||p1===p2)return toast("Choose two different players.");
 
 const{error}=await sb.from("wpbl_v2_teams").insert({
 season_id:season().id,
@@ -1310,9 +1014,7 @@ else await reload();
 }
 
 async function deleteTeam(id){
-const{error}=await sb.from("wpbl_v2_teams").update({
-active:false
-}).eq("id",id);
+const{error}=await sb.from("wpbl_v2_teams").update({active:false}).eq("id",id);
 
 if(error)toast(error.message);
 else await reload();
@@ -1326,45 +1028,25 @@ const ws=weeks();
 
 el.innerHTML=`
 <h1>Admin</h1>
-
 <p class="sub">League management</p>
 
 <div class="card">
-
 <h2>Share Join Link</h2>
-
 <div class="notice">${JOIN_URL}</div>
-
 <br>
-
-<button class="btn" onclick="copyJoin()">
-Copy Join Link
-</button>
-
+<button class="btn" onclick="copyJoin()">Copy Join Link</button>
 </div>
 
 <div class="card">
-
 <h2>Signup Notifications</h2>
-
-<p class="muted">
-Get an iPhone push notification whenever a new player joins WPBL.
-</p>
-
-<button class="btn" onclick="enableSignupNotifications()">
-Enable Push Notifications
-</button>
-
+<p class="muted">Get an iPhone push notification whenever a new player joins WPBL.</p>
+<button class="btn" onclick="enableSignupNotifications()">Enable Push Notifications</button>
 <div id="pushStatus" class="tiny muted" style="margin-top:8px">
-${typeof Notification!=="undefined"&&Notification.permission==="granted"
-?"Notifications are enabled on this device."
-:"Tap once to enable on this device."}
+${typeof Notification!=="undefined"&&Notification.permission==="granted"?"Notifications are enabled on this device.":"Tap once to enable on this device."}
 </div>
-
 </div>
 
 <div class="card">
-
 <h2>Season Settings</h2>
 
 <div class="field">
@@ -1376,19 +1058,10 @@ ${typeof Notification!=="undefined"&&Notification.permission==="granted"
 
 <div class="field">
 <label>League format</label>
-
 <select id="adminFormat">
-
-<option value="individual" ${s?.format==="individual"?"selected":""}>
-Individual / Rotating Partners
-</option>
-
-<option value="fixed" ${s?.format==="fixed"?"selected":""}>
-Fixed Teams
-</option>
-
+<option value="individual" ${s?.format==="individual"?"selected":""}>Individual / Rotating Partners</option>
+<option value="fixed" ${s?.format==="fixed"?"selected":""}>Fixed Teams</option>
 </select>
-
 </div>
 
 <br>
@@ -1441,14 +1114,10 @@ Playoffs enabled
 
 <br><br>
 
-<button class="btn" onclick="saveAdminSettings()">
-Save Settings
-</button>
-
+<button class="btn" onclick="saveAdminSettings()">Save Settings</button>
 </div>
 
 <div class="card">
-
 <h2>Create League Week</h2>
 
 <div class="grid grid2">
@@ -1467,54 +1136,31 @@ Save Settings
 
 <br>
 
-<button class="btn" onclick="createAdminWeek()">
-Create Week
-</button>
-
+<button class="btn" onclick="createAdminWeek()">Create Week</button>
 </div>
 
 ${ws.map(w=>`
 <div class="card">
-
 <div class="row between">
 
 <div>
-
-<h3>
-Week ${w.number} —
-${fmtDate(w.game_date)}
-</h3>
-
+<h3>Week ${w.number} — ${fmtDate(w.game_date)}</h3>
 <div class="tiny muted">
 ${gamesFor(w.id).length} games •
 ${D.availability.filter(a=>a.week_id===w.id&&a.status==="in").length} playing •
 ${D.availability.filter(a=>a.week_id===w.id&&a.status==="out").length} out
 </div>
-
 </div>
 
 <div class="row">
-
-<button class="btn ghost sm"
-onclick="toggleRsvp('${w.id}',${!w.rsvp_reopened})">
-
-${w.rsvp_reopened?"Close RSVP":"Reopen RSVP"}
-
-</button>
-
-<button class="btn sm" onclick="generateWeek('${w.id}')">
-Generate Matchups
-</button>
-
+<button class="btn ghost sm" onclick="toggleRsvp('${w.id}',${!w.rsvp_reopened})">${w.rsvp_reopened?"Close RSVP":"Reopen RSVP"}</button>
+<button class="btn sm" onclick="generateWeek('${w.id}')">Generate Matchups</button>
 </div>
 
 </div>
-
-</div>
-`).join("")}
+</div>`).join("")}
 
 <div class="card">
-
 <h2>Current Players</h2>
 
 ${D.profiles.map(p=>`
@@ -1523,8 +1169,7 @@ ${D.profiles.map(p=>`
 <b>${esc(pname(p.id))}</b>
 
 <div class="tiny muted">
-${esc(p.email||"")} •
-${esc(p.role||"member")}
+${esc(p.email||"")} • ${esc(p.role||"member")}
 ${p.is_substitute?" • Substitute":""}
 ${p.active===false?" • Inactive":""}
 </div>
@@ -1533,30 +1178,20 @@ ${p.active===false?" • Inactive":""}
 
 <div class="row">
 
-<button class="btn ghost sm"
-onclick="setPlayer('${p.id}',${!p.is_substitute},${p.role==="admin"},${p.active!==false})">
-
+<button class="btn ghost sm" onclick="setPlayer('${p.id}',${!p.is_substitute},${p.role==="admin"},${p.active!==false})">
 ${p.is_substitute?"Remove Sub":"Make Sub"}
-
 </button>
 
-<button class="btn ghost sm"
-onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role!=="admin"},${p.active!==false})">
-
+<button class="btn ghost sm" onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role!=="admin"},${p.active!==false})">
 ${p.role==="admin"?"Remove Admin":"Make Admin"}
-
 </button>
 
-<button class="btn ${p.active===false?"ok":"red"} sm"
-onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role==="admin"},${p.active===false})">
-
+<button class="btn ${p.active===false?"ok":"red"} sm" onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role==="admin"},${p.active===false})">
 ${p.active===false?"Activate":"Deactivate"}
-
 </button>
 
 </div>
-</div>
-`).join("")}
+</div>`).join("")}
 
 </div>`;
 }
@@ -1567,8 +1202,7 @@ const base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");
 const raw=atob(base64);
 const out=new Uint8Array(raw.length);
 
-for(let i=0;i<raw.length;i++)
-out[i]=raw.charCodeAt(i);
+for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);
 
 return out;
 }
@@ -1598,7 +1232,7 @@ if(error)throw error;
 async function enableSignupNotifications(){
 try{
 
-if(!("serviceWorker"in navigator)||!("PushManager"in window)||typeof Notification==="undefined")
+if(!("serviceWorker" in navigator)||!("PushManager" in window)||typeof Notification==="undefined")
 return toast("Push notifications are not supported here. On iPhone, open WPBL from the Home Screen icon and try again.");
 
 const permission=await Notification.requestPermission();
@@ -1612,11 +1246,12 @@ await navigator.serviceWorker.ready;
 
 let sub=await reg.pushManager.getSubscription();
 
-if(!sub)
+if(!sub){
 sub=await reg.pushManager.subscribe({
 userVisibleOnly:true,
 applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
 });
+}
 
 await savePushSubscription(sub);
 
@@ -1681,22 +1316,17 @@ else await reload();
 }
 
 async function toggleRsvp(id,val){
-const{error}=await sb.from("wpbl_v2_weeks").update({
-rsvp_reopened:val
-}).eq("id",id);
+const{error}=await sb.from("wpbl_v2_weeks").update({rsvp_reopened:val}).eq("id",id);
 
 if(error)toast(error.message);
 else await reload();
 }
 
 async function generateWeek(id){
-if(!confirm(
-"Generate or regenerate this week's matchups? Existing games for this week will be replaced."
-))return;
+if(!confirm("Generate or regenerate this week's matchups? Existing games for this week will be replaced."))
+return;
 
-const{error}=await sb.rpc("wpbl_v2_generate_week",{
-p_week_id:id
-});
+const{error}=await sb.rpc("wpbl_v2_generate_week",{p_week_id:id});
 
 if(error)toast(error.message);
 else await reload();
@@ -1722,14 +1352,9 @@ function renderPasswordRecovery(){
 document.getElementById("root").innerHTML=`
 <div class="auth">
 <div class="authbox">
-
 <img class="authlogo" src="${LOGO}">
-
 <h1>WPBL</h1>
-
-<p class="sub">
-Create your new WPBL password.
-</p>
+<p class="sub">Create your new WPBL password.</p>
 
 <div class="field">
 <label>New Password</label>
@@ -1743,12 +1368,9 @@ Create your new WPBL password.
 
 <br>
 
-<button class="btn" style="width:100%" onclick="saveNewPassword()">
-Set Password
-</button>
+<button class="btn" style="width:100%" onclick="saveNewPassword()">Set Password</button>
 
 <p id="recoveryMsg" class="tiny muted"></p>
-
 </div>
 </div>`;
 }
@@ -1768,8 +1390,7 @@ msg.textContent="Saving password...";
 
 const{error}=await sb.auth.updateUser({password});
 
-if(error)
-return msg.textContent=error.message;
+if(error)return msg.textContent=error.message;
 
 passwordRecoveryMode=false;
 
@@ -1807,7 +1428,7 @@ if(event==="SIGNED_OUT")
 renderAuth();
 });
 
-if("serviceWorker"in navigator){
+if("serviceWorker" in navigator){
 navigator.serviceWorker.register("./sw.js")
 .catch(e=>console.error("Service worker:",e));
 }
@@ -1820,6 +1441,7 @@ renderPasswordRecovery();
 }else{
 boot();
 }
+
 </script>
 </body>
 </html>
