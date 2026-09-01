@@ -7,14 +7,19 @@
 <title>WPBL — Wall Pickleball League</title>
 <style>
 :root{--navy:#0d2a4f;--blue:#1459a6;--red:#d8242f;--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#6b7485;--line:#dfe5ee;--ok:#147d4b;--warn:#a35a00}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 .auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#0d2a4f,#164e8d)}
 .authbox{width:min(440px,100%);background:#fff;border-radius:22px;padding:24px;text-align:center}
 .authlogo{width:180px;max-height:125px;object-fit:contain}
-.topbar{position:sticky;top:0;z-index:20;height:62px;display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--navy);color:#fff;box-shadow:0 2px 12px #0002}
+.topbar{position:sticky;top:0;z-index:20;height:62px;display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--navy);color:#fff}
 .logo{width:56px;height:42px;object-fit:contain}
-.brand{flex:1}.brand strong{font-size:19px}.brand small{display:block;opacity:.78}
+.brand{flex:1}
+.brand strong{font-size:19px}
+.brand small{display:block;opacity:.78}
 .iconbtn{border:1px solid #ffffff35;background:#ffffff18;color:#fff;border-radius:11px;padding:9px 11px}
 .control{position:sticky;top:62px;z-index:15;display:flex;gap:10px;align-items:center;padding:9px 14px;overflow:auto;background:#fff;border-bottom:1px solid var(--line)}
 .control label{font-size:11px;color:var(--muted)}
@@ -23,29 +28,46 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:
 .nav button{border:0;background:#fff;color:#667085;padding:9px 3px;font-size:11px}
 .nav button span{display:block;font-size:20px;margin-bottom:2px}
 .nav button.active{color:var(--blue);font-weight:800}
-h1{font-size:25px;margin:2px 0 4px}h2{font-size:19px;margin:0 0 12px}h3{font-size:16px;margin:0 0 9px}
-.sub{color:var(--muted);margin:0 0 15px}.tiny{font-size:12px}.muted{color:var(--muted)}
+h1{font-size:25px;margin:2px 0 4px}
+h2{font-size:19px;margin:0 0 12px}
+h3{font-size:16px;margin:0 0 9px}
+.sub{color:var(--muted);margin:0 0 15px}
+.tiny{font-size:12px}
+.muted{color:var(--muted)}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 3px 14px #17315a0a}
-.hero{background:linear-gradient(135deg,var(--navy),#173e72);color:#fff;border:0}.hero .sub{color:#dce8fa}
-.grid{display:grid;gap:12px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hero{background:linear-gradient(135deg,var(--navy),#173e72);color:#fff;border:0}
+.hero .sub{color:#dce8fa}
+.grid{display:grid;gap:12px}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:680px){.grid2{grid-template-columns:1fr}}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.stack{display:flex;flex-direction:column;gap:9px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
 .btn{border:0;border-radius:11px;padding:10px 13px;font-weight:750;color:#fff;background:var(--blue)}
-.btn.ghost{background:#eef3f9;color:var(--navy)}.btn.red{background:var(--red)}.btn.ok{background:var(--ok)}.btn.sm{padding:7px 9px;font-size:13px}
+.btn.ghost{background:#eef3f9;color:var(--navy)}
+.btn.red{background:var(--red)}
+.btn.ok{background:var(--ok)}
+.btn.sm{padding:7px 9px;font-size:13px}
 .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#eaf1fb;color:var(--blue);font-size:12px;font-weight:750}
-.badge.red{background:#fdecef;color:var(--red)}.badge.ok{background:#e9f7f0;color:var(--ok)}.badge.warn{background:#fff2df;color:var(--warn)}
+.badge.red{background:#fdecef;color:var(--red)}
+.badge.ok{background:#e9f7f0;color:var(--ok)}
+.badge.warn{background:#fff2df;color:var(--warn)}
 .item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;margin:7px 0}
-.game{border-left:5px solid var(--blue)}.game.current{border-left-color:var(--red)}.game.pending{border-left-color:#e1a100}.game.done{opacity:.67}
+.game{border-left:5px solid var(--blue)}
+.game.current{border-left-color:var(--red)}
+.game.pending{border-left-color:#e1a100}
+.game.done{opacity:.67}
 input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);padding:10px}
-textarea{min-height:90px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;color:var(--muted);font-weight:650}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid var(--line);padding:9px 7px;text-align:left}
-th{color:var(--muted);font-size:12px}.tablewrap{overflow:auto}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--muted);font-weight:650}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:9px 7px;text-align:left}
+th{color:var(--muted);font-size:12px}
+.tablewrap{overflow:auto}
 .notice{padding:10px 12px;border-radius:10px;background:#eef5ff;color:#174d85;font-size:13px}
-.notice.warn{background:#fff3df;color:#8a4e00}.notice.ok{background:#eaf8f0;color:#17623e}.notice.red{background:#fdecef;color:#9d1620}
-.modalback{position:fixed;inset:0;z-index:80;background:#06152bcc;display:flex;align-items:flex-end;justify-content:center}
-.modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px}
-hr{border:0;border-top:1px solid var(--line);margin:14px 0}
-.right{text-align:right}.scoreline{font-size:24px;font-weight:800}.danger{color:var(--red)}
+.notice.ok{background:#eaf8f0;color:#17623e}
+.notice.red{background:#fdecef;color:#9d1620}
+.scoreline{font-size:24px;font-weight:800}
+.teamline{font-weight:800;font-size:17px}
 </style>
 </head>
 <body>
@@ -56,13 +78,12 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 const SUPABASE_URL="https://trujrwhkkjepyorpvjjr.supabase.co";
 const SUPABASE_KEY="sb_publishable_RcP9-stV689diug__RIZkg_g5agpSNR";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-
 const LOGO="https://raw.githubusercontent.com/asnehpets/GLOAT-League/main/approved-wpbl-logo.png";
+const JOIN_URL="https://asnehpets.github.io/WPBL/";
 
 const $=s=>document.querySelector(s);
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const fmtDate=d=>new Date(d+"T12:00:00").toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"});
-const fmtTime=d=>d?new Date(d).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"";
+const esc=s=>String(s??"").replace(/[&<>\"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const fmtDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"}):"";
 
 let session="";
 let view="home";
@@ -70,962 +91,985 @@ let activeSeasonId=localStorage.getItem("wpbl_active_season")||"";
 let activeWeekId=localStorage.getItem("wpbl_active_week")||"";
 
 let D={
-  profiles:[],
-  seasons:[],
-  seasonPlayers:[],
-  teams:[],
-  weeks:[],
-  availability:[],
-  pairs:[],
-  games:[],
-  posts:[],
-  comments:[],
-  pollOptions:[],
-  pollVotes:[],
-  playoffs:[],
-  invites:[]
+ profiles:[],seasons:[],seasonPlayers:[],teams:[],weeks:[],
+ availability:[],pairs:[],games:[],posts:[],comments:[],
+ pollOptions:[],pollVotes:[],playoffs:[]
 };
 
 function me(){return D.profiles.find(p=>p.id===session)}
 function isAdmin(){return me()?.role==="admin"}
 function profile(id){return D.profiles.find(x=>x.id===id)}
 function pname(id){
-  const p=profile(id);
-  return p?.name||[p?.first_name,p?.last_name].filter(Boolean).join(" ")||p?.email||"Unknown";
+ const p=profile(id);
+ return p?.name||[p?.first_name,p?.last_name].filter(Boolean).join(" ")||p?.email||"Unknown";
 }
 function season(){
-  return D.seasons.find(s=>s.id===activeSeasonId)||D.seasons.find(s=>s.status==="active")||D.seasons[0];
+ return D.seasons.find(s=>s.id===activeSeasonId)||
+ D.seasons.find(s=>s.status==="active")||D.seasons[0];
 }
-function seasonPlayers(){
-  const s=season();
-  return !s?[]:D.seasonPlayers.filter(x=>x.season_id===s.id&&x.active).map(x=>x.player_id);
+function splayers(){
+ const s=season();
+ return s?D.seasonPlayers.filter(x=>x.season_id===s.id&&x.active).map(x=>x.player_id):[];
 }
-function week(){
-  const s=season();
-  if(!s)return null;
-  const ws=D.weeks.filter(w=>w.season_id===s.id).sort((a,b)=>a.number-b.number);
-  return ws.find(w=>w.id===activeWeekId)||ws.at(-1)||null;
+function weeks(){
+ const s=season();
+ return s?D.weeks.filter(w=>w.season_id===s.id).sort((a,b)=>a.number-b.number):[];
 }
-function toast(msg){alert(msg)}
+function gamesFor(wid){
+ return D.games.filter(g=>g.week_id===wid).sort((a,b)=>a.position-b.position);
+}
+function availabilityFor(wid,pid=session){
+ return D.availability.find(a=>a.week_id===wid&&a.player_id===pid)?.status||"";
+}
+function teamText(a){return(a||[]).map(pname).join(" & ")}
+function toast(m){alert(m)}
 
-async function q(table){
-  const {data,error}=await sb.from(table).select("*");
-  if(error) throw error;
-  return data||[];
-}
-
-async function boot(){
-  const {data:{session:s}}=await sb.auth.getSession();
-  session=s?.user?.id||"";
-  if(!session){renderAuth();return}
-  await reload();
+async function q(t){
+ const{data,error}=await sb.from(t).select("*");
+ if(error)throw error;
+ return data||[];
 }
 
 async function reload(){
-  try{
-    const [profiles,seasons,seasonPlayers,teams,weeks,availability,pairs,games,posts,comments,pollOptions,pollVotes,playoffs]=await Promise.all([
-      q("profiles"),
-      q("wpbl_v2_seasons"),
-      q("wpbl_v2_season_players"),
-      q("wpbl_v2_teams"),
-      q("wpbl_v2_weeks"),
-      q("wpbl_v2_availability"),
-      q("wpbl_v2_weekly_pairs"),
-      q("wpbl_v2_games"),
-      q("wpbl_v2_posts"),
-      q("wpbl_v2_comments"),
-      q("wpbl_v2_poll_options"),
-      q("wpbl_v2_poll_votes"),
-      q("wpbl_v2_playoff_matches")
-    ]);
+ try{
+  const names=[
+   "profiles","wpbl_v2_seasons","wpbl_v2_season_players",
+   "wpbl_v2_teams","wpbl_v2_weeks","wpbl_v2_availability",
+   "wpbl_v2_weekly_pairs","wpbl_v2_games","wpbl_v2_posts",
+   "wpbl_v2_comments","wpbl_v2_poll_options","wpbl_v2_poll_votes",
+   "wpbl_v2_playoff_matches"
+  ];
 
-    D.profiles=profiles;
-    D.seasons=seasons;
-    D.seasonPlayers=seasonPlayers;
-    D.teams=teams;
-    D.weeks=weeks;
-    D.availability=availability;
-    D.pairs=pairs;
-    D.games=games;
-    D.posts=posts;
-    D.comments=comments;
-    D.pollOptions=pollOptions;
-    D.pollVotes=pollVotes;
-    D.playoffs=playoffs;
+  const a=await Promise.all(names.map(q));
 
-    if(isAdmin()){
-      try{D.invites=await q("wpbl_v2_invites")}catch{}
-    }
+  [
+   D.profiles,D.seasons,D.seasonPlayers,D.teams,D.weeks,
+   D.availability,D.pairs,D.games,D.posts,D.comments,
+   D.pollOptions,D.pollVotes,D.playoffs
+  ]=a;
 
-    if(!activeSeasonId||!D.seasons.some(s=>s.id===activeSeasonId)){
-      activeSeasonId=(D.seasons.find(s=>s.status==="active")||D.seasons[0])?.id||"";
-      localStorage.setItem("wpbl_active_season",activeSeasonId);
-    }
-
-    render();
-  }catch(e){
-    document.getElementById("root").innerHTML=`
-      <div class="auth">
-        <div class="authbox">
-          <img class="authlogo" src="${LOGO}">
-          <h1>WPBL</h1>
-          <div class="notice red">${esc(e.message)}</div>
-          <br>
-          <button class="btn" onclick="reload()">Retry</button>
-        </div>
-      </div>`;
+  if(!activeSeasonId||!D.seasons.some(s=>s.id===activeSeasonId)){
+   activeSeasonId=(D.seasons.find(s=>s.status==="active")||D.seasons[0])?.id||"";
+   localStorage.setItem("wpbl_active_season",activeSeasonId);
   }
+
+  render();
+ }catch(e){
+  document.getElementById("root").innerHTML=
+  `<div class="auth"><div class="authbox">
+   <img class="authlogo" src="${LOGO}">
+   <h1>WPBL</h1>
+   <div class="notice red">${esc(e.message)}</div><br>
+   <button class="btn" onclick="reload()">Retry</button>
+   </div></div>`;
+ }
+}
+
+async function boot(){
+ const{data:{session:s}}=await sb.auth.getSession();
+ session=s?.user?.id||"";
+ if(!session)return renderAuth();
+ await reload();
 }
 
 function renderAuth(){
-  document.getElementById("root").innerHTML=`
-    <div class="auth">
-      <div class="authbox">
-        <img class="authlogo" src="${LOGO}">
-        <h1>WPBL</h1>
-        <p class="sub">Wall Pickleball League</p>
+ document.getElementById("root").innerHTML=`
+ <div class="auth"><div class="authbox">
+ <img class="authlogo" src="${LOGO}">
+ <h1>WPBL</h1>
+ <p class="sub">Wall Pickleball League</p>
 
-        <div id="loginBox">
-          <div class="field">
-            <label>Email</label>
-            <input id="email" type="email" placeholder="you@email.com">
-          </div>
+ <div id="loginBox">
+  <div class="field"><label>Email</label><input id="email" type="email"></div>
+  <div class="field"><label>Password</label><input id="password" type="password"></div>
+  <br>
+  <button class="btn" style="width:100%" onclick="passwordSignIn()">Sign In</button>
+  <br><br>
+  <button class="btn ghost" style="width:100%" onclick="showJoinForm()">Join WPBL</button>
+  <p id="authMsg" class="tiny muted"></p>
+ </div>
 
-          <div class="field">
-            <label>Password</label>
-            <input id="password" type="password" placeholder="Password">
-          </div>
-
-          <br>
-
-          <button class="btn" style="width:100%" onclick="passwordSignIn()">
-            Sign In
-          </button>
-
-          <br><br>
-
-          <button class="btn ghost" style="width:100%" onclick="showJoinForm()">
-            Join WPBL
-          </button>
-
-          <p id="authMsg" class="tiny muted"></p>
-        </div>
-
-        <div id="joinBox" class="hidden">
-          <div class="notice">Create your WPBL account.</div>
-
-          <br>
-
-          <div class="field">
-            <label>First Name</label>
-            <input id="joinFirst">
-          </div>
-
-          <div class="field">
-            <label>Last Name</label>
-            <input id="joinLast">
-          </div>
-
-          <div class="field">
-            <label>Email</label>
-            <input id="joinEmail" type="email">
-          </div>
-
-          <div class="field">
-            <label>Create Password</label>
-            <input id="joinPassword" type="password">
-          </div>
-
-          <div class="field">
-            <label>Confirm Password</label>
-            <input id="joinConfirm" type="password">
-          </div>
-
-          <br>
-
-          <button class="btn" style="width:100%" onclick="joinWPBL()">
-            Create Account
-          </button>
-
-          <br><br>
-
-          <button class="btn ghost" style="width:100%" onclick="showLoginForm()">
-            Back to Sign In
-          </button>
-
-          <p id="joinMsg" class="tiny muted"></p>
-        </div>
-      </div>
-    </div>`;
+ <div id="joinBox" class="hidden">
+  <div class="notice">Create your WPBL account.</div><br>
+  <div class="field"><label>First Name</label><input id="joinFirst"></div>
+  <div class="field"><label>Last Name</label><input id="joinLast"></div>
+  <div class="field"><label>Email</label><input id="joinEmail" type="email"></div>
+  <div class="field"><label>Create Password</label><input id="joinPassword" type="password"></div>
+  <div class="field"><label>Confirm Password</label><input id="joinConfirm" type="password"></div>
+  <br>
+  <button class="btn" style="width:100%" onclick="joinWPBL()">Create Account</button>
+  <br><br>
+  <button class="btn ghost" style="width:100%" onclick="showLoginForm()">Back to Sign In</button>
+  <p id="joinMsg" class="tiny muted"></p>
+ </div>
+ </div></div>`;
 }
 
 function showJoinForm(){
-  $("#loginBox").classList.add("hidden");
-  $("#joinBox").classList.remove("hidden");
+ $("#loginBox").classList.add("hidden");
+ $("#joinBox").classList.remove("hidden");
 }
-
 function showLoginForm(){
-  $("#joinBox").classList.add("hidden");
-  $("#loginBox").classList.remove("hidden");
+ $("#joinBox").classList.add("hidden");
+ $("#loginBox").classList.remove("hidden");
 }
 
 async function passwordSignIn(){
-  const email=$("#email").value.trim().toLowerCase();
-  const password=$("#password").value;
-  const msg=$("#authMsg");
-
-  if(!email || !password){
-    msg.textContent="Enter your email and password.";
-    return;
-  }
-
-  msg.textContent="Signing in...";
-
-  const {error}=await sb.auth.signInWithPassword({email,password});
-
-  if(error){
-    msg.textContent=error.message;
-    return;
-  }
+ const email=$("#email").value.trim().toLowerCase();
+ const password=$("#password").value;
+ const msg=$("#authMsg");
+ if(!email||!password)return msg.textContent="Enter your email and password.";
+ msg.textContent="Signing in...";
+ const{error}=await sb.auth.signInWithPassword({email,password});
+ if(error)msg.textContent=error.message;
 }
 
 async function joinWPBL(){
-  const first_name=$("#joinFirst").value.trim();
-  const last_name=$("#joinLast").value.trim();
-  const email=$("#joinEmail").value.trim().toLowerCase();
-  const password=$("#joinPassword").value;
-  const confirm=$("#joinConfirm").value;
-  const msg=$("#joinMsg");
+ const first_name=$("#joinFirst").value.trim();
+ const last_name=$("#joinLast").value.trim();
+ const email=$("#joinEmail").value.trim().toLowerCase();
+ const password=$("#joinPassword").value;
+ const confirm=$("#joinConfirm").value;
+ const msg=$("#joinMsg");
 
-  if(!first_name || !last_name || !email || !password || !confirm){
-    msg.textContent="Complete all fields.";
-    return;
-  }
+ if(!first_name||!last_name||!email||!password||!confirm)
+  return msg.textContent="Complete all fields.";
 
-  if(password.length < 8){
-    msg.textContent="Password must be at least 8 characters.";
-    return;
-  }
+ if(password.length<8)
+  return msg.textContent="Password must be at least 8 characters.";
 
-  if(password !== confirm){
-    msg.textContent="Passwords do not match.";
-    return;
-  }
+ if(password!==confirm)
+  return msg.textContent="Passwords do not match.";
 
-  msg.textContent="Creating account...";
+ msg.textContent="Creating account...";
 
-  const {data,error}=await sb.auth.signUp({
-    email,
-    password,
-    options:{
-      data:{first_name,last_name}
-    }
-  });
+ const{data,error}=await sb.auth.signUp({
+  email,password,
+  options:{data:{first_name,last_name}}
+ });
 
-  if(error){
-    msg.textContent=error.message;
-    return;
-  }
+ if(error)return msg.textContent=error.message;
+ if(!data.session)return msg.textContent="Account created but could not sign in automatically.";
 
-  if(!data.session){
-    msg.textContent="Account created but could not sign in automatically.";
-    return;
-  }
+ const{error:joinError}=await sb.rpc("wpbl_join_league",{
+  p_first_name:first_name,
+  p_last_name:last_name
+ });
 
-  const {error:joinError}=await sb.rpc("wpbl_join_league",{
-    p_first_name:first_name,
-    p_last_name:last_name
-  });
+ if(joinError)return msg.textContent=joinError.message;
 
-  if(joinError){
-    msg.textContent=joinError.message;
-    return;
-  }
+ session=data.user.id;
+ await reload();
+}
 
-  session=data.user.id;
-  await reload();
-}async function logout(){
-  await sb.auth.signOut();
-  session="";
-  renderAuth();
+async function logout(){
+ await sb.auth.signOut();
+ session="";
+ renderAuth();
 }
 
 function navButton(v,icon,label){
-  return `<button class="${view===v?"active":""}" onclick="go('${v}')"><span>${icon}</span>${label}</button>`;
+ return `<button class="${view===v?"active":""}" onclick="go('${v}')">
+ <span>${icon}</span>${label}</button>`;
 }
 
 function render(){
-  const s=season();
-  document.getElementById("root").innerHTML=`
-    <header class="topbar">
-      <img class="logo" src="${LOGO}">
-      <div class="brand">
-        <strong>WPBL</strong>
-        <small>Wall Pickleball League</small>
-      </div>
-      <button class="iconbtn" onclick="go('board')">💬</button>
-      <button class="iconbtn" onclick="go('profile')">👤</button>
-    </header>
+ const s=season();
 
-    <div class="control">
-      <label>
-        LEAGUE / SEASON
-        <select id="seasonSelect">
-          ${D.seasons.map(x=>`<option value="${x.id}" ${x.id===s?.id?"selected":""}>${esc(x.name)}</option>`).join("")}
-        </select>
-      </label>
-      ${s?`<span class="badge">${s.format==="individual"?"Rotating Partners":"Fixed Teams"}</span>`:""}
-    </div>
+ document.getElementById("root").innerHTML=`
+ <header class="topbar">
+  <img class="logo" src="${LOGO}">
+  <div class="brand"><strong>WPBL</strong><small>Wall Pickleball League</small></div>
+  <button class="iconbtn" onclick="go('board')">💬</button>
+  <button class="iconbtn" onclick="go('profile')">👤</button>
+ </header>
 
-    <main id="main" class="main"></main>
+ <div class="control">
+  <label>LEAGUE / SEASON
+   <select id="seasonSelect">
+   ${D.seasons.map(x=>`<option value="${x.id}" ${x.id===s?.id?"selected":""}>${esc(x.name)}</option>`).join("")}
+   </select>
+  </label>
+  ${s?`<span class="badge">${s.format==="individual"?"Rotating Partners":"Fixed Teams"}</span>`:""}
+ </div>
 
-    <nav class="nav">
-      ${navButton("home","⌂","Home")}
-      ${navButton("schedule","▣","Schedule")}
-      ${navButton("live","▶","Live")}
-      ${navButton("standings","★","Standings")}
-      ${navButton("more","☰","More")}
-    </nav>`;
+ <main id="main" class="main"></main>
 
-  $("#seasonSelect").onchange=e=>{
-    activeSeasonId=e.target.value;
-    localStorage.setItem("wpbl_active_season",activeSeasonId);
-    render();
-  };
+ <nav class="nav">
+ ${navButton("home","⌂","Home")}
+ ${navButton("schedule","▣","Schedule")}
+ ${navButton("live","▶","Live")}
+ ${navButton("standings","★","Standings")}
+ ${navButton("more","☰","More")}
+ </nav>`;
 
-  renderView();
+ $("#seasonSelect").onchange=e=>{
+  activeSeasonId=e.target.value;
+  localStorage.setItem("wpbl_active_season",activeSeasonId);
+  render();
+ };
+
+ renderView();
 }
 
 function go(v){view=v;render()}
 
 function renderView(){
-  const el=$("#main");
-  if(view==="home") homeView(el);
-  else if(view==="schedule") scheduleView(el);
-  else if(view==="live") liveView(el);
-  else if(view==="standings") standingsView(el);
-  else if(view==="board") boardView(el);
-  else if(view==="profile") profileView(el);
-  else if(view==="admin") adminView(el);
-else moreView(el);
-}
-
-function homeView(el){
-  const s=season();
-  el.innerHTML=`
-    <h1>${esc(s?.name||"WPBL")}</h1>
-    <p class="sub">${s?.format==="individual"?"Individual standings • rotating weekly partners":"Fixed-team league"}</p>
-
-    <div class="card hero">
-      <h2>Season ready</h2>
-      <p class="sub">Shared league data is now connected through Supabase.</p>
-    </div>
-
-    <div class="card">
-      <h3>Standings</h3>
-      ${standingsMini()}
-    </div>
-
-    <div class="card">
-      <h3>League Board</h3>
-      <p class="muted">${D.posts.length} posts</p>
-      <button class="btn ghost sm" onclick="go('board')">Open message board</button>
-    </div>`;
+ const el=$("#main");
+ if(view==="home")homeView(el);
+ else if(view==="schedule")scheduleView(el);
+ else if(view==="live")liveView(el);
+ else if(view==="standings")standingsView(el);
+ else if(view==="board")boardView(el);
+ else if(view==="profile")profileView(el);
+ else if(view==="admin")adminView(el);
+ else if(view==="teams")teamsView(el);
+ else if(view==="playoffs")playoffsView(el);
+ else moreView(el);
 }
 
 function standingsData(){
-  const s=season();
-  if(!s)return[];
+ const s=season();
+ if(!s)return[];
 
-  const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
-  const rows={};
+ const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
+ const rows={};
+ const ensure=id=>rows[id]||(rows[id]={id,w:0,l:0,gp:0,pf:0,pa:0});
 
-  const ensure=id=>rows[id]||(rows[id]={id,w:0,l:0,gp:0,pf:0,pa:0});
+ splayers().forEach(ensure);
 
-  seasonPlayers().forEach(ensure);
+ D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
+  const A=g.actual_team_a||[];
+  const B=g.actual_team_b||[];
+  const aWin=g.score_a>g.score_b;
 
-  D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
-    const A=g.actual_team_a||[];
-    const B=g.actual_team_b||[];
-    const aWin=g.score_a>g.score_b;
-
-    A.forEach(id=>{
-      const r=ensure(id);
-      r.gp++;
-      r.pf+=g.score_a||0;
-      r.pa+=g.score_b||0;
-      if(aWin)r.w++;else r.l++;
-    });
-
-    B.forEach(id=>{
-      const r=ensure(id);
-      r.gp++;
-      r.pf+=g.score_b||0;
-      r.pa+=g.score_a||0;
-      if(aWin)r.l++;else r.w++;
-    });
+  A.forEach(id=>{
+   const r=ensure(id);
+   r.gp++;r.pf+=g.score_a||0;r.pa+=g.score_b||0;
+   if(aWin)r.w++;else r.l++;
   });
 
-  return Object.values(rows)
-    .map(r=>({...r,pct:r.gp?r.w/r.gp:0,pd:r.pf-r.pa}))
-    .sort((a,b)=>b.pct-a.pct||b.pd-a.pd||b.w-a.w);
+  B.forEach(id=>{
+   const r=ensure(id);
+   r.gp++;r.pf+=g.score_b||0;r.pa+=g.score_a||0;
+   if(aWin)r.l++;else r.w++;
+  });
+ });
+
+ return Object.values(rows)
+  .map(r=>({...r,pct:r.gp?r.w/r.gp:0,pd:r.pf-r.pa}))
+  .sort((a,b)=>b.pct-a.pct||b.pd-a.pd||b.w-a.w);
 }
 
 function standingsMini(){
-  return `<table>
-    <tr><th>#</th><th>Player</th><th>W-L</th><th>Win%</th></tr>
-    ${standingsData().slice(0,5).map((r,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td>${esc(pname(r.id))}</td>
-        <td>${r.w}-${r.l}</td>
-        <td>${(r.pct*100).toFixed(1)}%</td>
-      </tr>`).join("")}
-  </table>`;
+ return `<table>
+ <tr><th>#</th><th>Player</th><th>W-L</th><th>Win%</th></tr>
+ ${standingsData().slice(0,5).map((r,i)=>`
+ <tr><td>${i+1}</td><td>${esc(pname(r.id))}</td>
+ <td>${r.w}-${r.l}</td><td>${(r.pct*100).toFixed(1)}%</td></tr>`).join("")}
+ </table>`;
+}
+
+function homeView(el){
+ const s=season();
+ const w=weeks().at(-1);
+
+ el.innerHTML=`
+ <h1>${esc(s?.name||"WPBL")}</h1>
+ <p class="sub">${s?.format==="individual"?"Individual standings • rotating weekly partners":"Fixed-team league"}</p>
+
+ <div class="card hero">
+  <h2>Wall Pickleball League</h2>
+  <p class="sub">${w?`Next league week: Week ${w.number} — ${fmtDate(w.game_date)}`:"Season ready"}</p>
+ </div>
+
+ <div class="card">
+  <h3>Standings</h3>
+  ${standingsMini()}
+ </div>
+
+ <div class="card">
+  <h3>League Board</h3>
+  <p class="muted">${D.posts.length} posts</p>
+  <button class="btn ghost sm" onclick="go('board')">Open message board</button>
+ </div>`;
 }
 
 function standingsView(el){
-  el.innerHTML=`
-    <h1>Standings</h1>
-    <p class="sub">Win % → point differential → wins</p>
-    <div class="card tablewrap">
-      <table>
-        <tr>
-          <th>#</th><th>Player</th><th>W-L</th><th>GP</th><th>Win%</th><th>PF</th><th>PA</th><th>+/-</th>
-        </tr>
-        ${standingsData().map((r,i)=>`
-          <tr>
-            <td>${i+1}</td>
-            <td><b>${esc(pname(r.id))}</b></td>
-            <td>${r.w}-${r.l}</td>
-            <td>${r.gp}</td>
-            <td>${(r.pct*100).toFixed(1)}%</td>
-            <td>${r.pf}</td>
-            <td>${r.pa}</td>
-            <td>${r.pd}</td>
-          </tr>`).join("")}
-      </table>
-    </div>`;
+ el.innerHTML=`
+ <h1>Standings</h1>
+ <p class="sub">Win % → point differential → wins</p>
+ <div class="card tablewrap">
+ <table>
+ <tr><th>#</th><th>Player</th><th>W-L</th><th>GP</th><th>Win%</th><th>PF</th><th>PA</th><th>+/-</th></tr>
+ ${standingsData().map((r,i)=>`
+ <tr>
+ <td>${i+1}</td>
+ <td><b>${esc(pname(r.id))}</b></td>
+ <td>${r.w}-${r.l}</td>
+ <td>${r.gp}</td>
+ <td>${(r.pct*100).toFixed(1)}%</td>
+ <td>${r.pf}</td>
+ <td>${r.pa}</td>
+ <td>${r.pd}</td>
+ </tr>`).join("")}
+ </table></div>`;
+}
+
+async function setAvailability(wid,status){
+ const{error}=await sb.rpc("wpbl_v2_set_availability",{
+  p_week_id:wid,
+  p_status:status
+ });
+ if(error)toast(error.message);
+ else await reload();
 }
 
 function scheduleView(el){
-  const s=season();
-  const ws=D.weeks.filter(w=>w.season_id===s?.id).sort((a,b)=>a.number-b.number);
+ const ws=weeks();
 
-  el.innerHTML=`
-    <h1>Schedule</h1>
-    <p class="sub">${ws.length?`${ws.length} weeks created`:"No weeks created yet"}</p>
+ el.innerHTML=`
+ <h1>Schedule</h1>
+ <p class="sub">${ws.length?`${ws.length} weeks created`:"No weeks created yet"}</p>
 
-    ${ws.map(w=>{
-      const games=D.games.filter(g=>g.week_id===w.id).sort((a,b)=>a.position-b.position);
-      return `
-        <div class="card">
-          <h2>Week ${w.number} — ${fmtDate(w.game_date)}</h2>
-          ${games.length?games.map(g=>`
-            <div class="item game ${g.status==="confirmed"?"done":g.status==="pending"?"pending":""}">
-              <b>Game ${g.position}</b>
-              <div>${(g.actual_team_a||[]).map(pname).join(" & ")}</div>
-              <div class="tiny muted">vs</div>
-              <div>${(g.actual_team_b||[]).map(pname).join(" & ")}</div>
-              ${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
-            </div>`).join(""):`<p class="muted">No games generated.</p>`}
-        </div>`;
-    }).join("")}`;
+ ${ws.map(w=>{
+  const games=gamesFor(w.id);
+  const av=availabilityFor(w.id);
+
+  return `<div class="card">
+   <div class="row between">
+    <div>
+     <h2>Week ${w.number} — ${fmtDate(w.game_date)}</h2>
+     <div class="tiny muted">Your RSVP: ${av==="in"?"Playing":av==="out"?"Not Playing":"Not set"}</div>
+    </div>
+    <div class="row">
+     <button class="btn ok sm" onclick="setAvailability('${w.id}','in')">Playing</button>
+     <button class="btn red sm" onclick="setAvailability('${w.id}','out')">Not Playing</button>
+    </div>
+   </div>
+
+   ${games.length?games.map(g=>`
+   <div class="item game ${g.status==="confirmed"?"done":g.status==="pending"?"pending":""}">
+    <b>Game ${g.position}</b>
+    <div>${esc(teamText(g.actual_team_a))}</div>
+    <div class="tiny muted">vs</div>
+    <div>${esc(teamText(g.actual_team_b))}</div>
+    ${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
+   </div>`).join(""):`<p class="muted">Matchups not generated yet.</p>`}
+  </div>`;
+ }).join("")}`;
+}
+
+function canSubmit(g){
+ return isAdmin()||(g.actual_team_a||[]).includes(session)||(g.actual_team_b||[]).includes(session);
+}
+
+function canConfirm(g){
+ if(isAdmin())return true;
+ if(g.status!=="pending")return false;
+
+ const A=g.actual_team_a||[];
+ const B=g.actual_team_b||[];
+
+ if(A.includes(g.submitted_by))return B.includes(session);
+ if(B.includes(g.submitted_by))return A.includes(session);
+ return false;
 }
 
 function liveView(el){
-  const s=season();
-  const ws=D.weeks.filter(w=>w.season_id===s?.id).sort((a,b)=>a.number-b.number);
-  const w=ws.at(-1);
+ const w=weeks().at(-1);
 
-  if(!w){
-    el.innerHTML=`<h1>Live</h1><div class="card">No league night scheduled yet.</div>`;
-    return;
-  }
+ if(!w){
+  el.innerHTML=`<h1>Live</h1><div class="card">No league night scheduled yet.</div>`;
+  return;
+ }
 
-  const games=D.games.filter(g=>g.week_id===w.id).sort((a,b)=>a.position-b.position);
-  const g=games.find(x=>x.status!=="confirmed");
+ const games=gamesFor(w.id);
+ const index=games.findIndex(x=>x.status!=="confirmed");
+ const g=index>=0?games[index]:null;
+ const next=index>=0?games[index+1]:null;
 
-  el.innerHTML=`
-    <h1>Live Games</h1>
-    <p class="sub">Week ${w.number}</p>
-    ${g?`
-      <div class="card game current">
-        <span class="badge red">CURRENT</span>
-        <br><br>
-        <b>${(g.actual_team_a||[]).map(pname).join(" & ")}</b>
-        <div class="tiny muted">VS</div>
-        <b>${(g.actual_team_b||[]).map(pname).join(" & ")}</b>
-        ${g.score_a!=null?`<div class="scoreline">${g.score_a}–${g.score_b}</div>`:""}
-      </div>`:
-      `<div class="card"><h2>All games complete</h2></div>`
-    }`;
+ el.innerHTML=`
+ <h1>Live Games</h1>
+ <p class="sub">Week ${w.number} — ${fmtDate(w.game_date)}</p>
+
+ ${g?`
+ <div class="card game current">
+  <span class="badge red">CURRENT</span><br><br>
+  <div class="teamline">${esc(teamText(g.actual_team_a))}</div>
+  <div class="tiny muted">VS</div>
+  <div class="teamline">${esc(teamText(g.actual_team_b))}</div>
+
+  ${g.status==="scheduled"&&canSubmit(g)?`
+   <br>
+   <div class="grid grid2">
+    <div class="field"><label>Team A Score</label><input id="scoreA" type="number"></div>
+    <div class="field"><label>Team B Score</label><input id="scoreB" type="number"></div>
+   </div><br>
+   <button class="btn" onclick="submitScore('${g.id}')">Submit Score</button>
+  `:""}
+
+  ${g.status==="pending"?`
+   <div class="scoreline">${g.score_a}–${g.score_b}</div>
+   <div class="notice">Waiting for score confirmation.</div><br>
+   ${canConfirm(g)?`<button class="btn ok" onclick="confirmScore('${g.id}')">Confirm Score</button>`:""}
+   ${isAdmin()?` <button class="btn ghost" onclick="reopenScore('${g.id}')">Reopen / Correct</button>`:""}
+  `:""}
+ </div>`:
+ `<div class="card"><h2>All games complete</h2></div>`}
+
+ ${next?`
+ <div class="card">
+  <span class="badge">ON DECK</span><br><br>
+  <b>${esc(teamText(next.actual_team_a))}</b>
+  <div class="tiny muted">vs</div>
+  <b>${esc(teamText(next.actual_team_b))}</b>
+ </div>`:""}
+
+ <div class="card">
+  <h3>Game Order</h3>
+  ${games.map(x=>`
+   <div class="item">
+    <b>Game ${x.position}</b> — ${esc(teamText(x.actual_team_a))} vs ${esc(teamText(x.actual_team_b))}
+    ${x.status==="confirmed"?` • ${x.score_a}-${x.score_b}`:""}
+   </div>`).join("")}
+ </div>`;
+}
+
+async function submitScore(id){
+ const a=Number($("#scoreA").value);
+ const b=Number($("#scoreB").value);
+
+ const{error}=await sb.rpc("wpbl_v2_submit_score",{
+  p_game_id:id,
+  p_score_a:a,
+  p_score_b:b
+ });
+
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function confirmScore(id){
+ const{error}=await sb.rpc("wpbl_v2_confirm_score",{p_game_id:id});
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function reopenScore(id){
+ const{error}=await sb.rpc("wpbl_v2_reopen_score",{p_game_id:id});
+ if(error)toast(error.message);
+ else await reload();
 }
 
 function boardView(el){
-  const posts=[...D.posts].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+ const posts=[...D.posts].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
 
-  el.innerHTML=`
-    <div class="row between">
-      <div>
-        <h1>WPBL Board</h1>
-        <p class="sub">Shared league discussion</p>
-      </div>
-      <button class="btn" onclick="newPost()">New Post</button>
-    </div>
+ el.innerHTML=`
+ <div class="row between">
+  <div><h1>WPBL Board</h1><p class="sub">League discussion</p></div>
+  <div class="row">
+   <button class="btn ghost" onclick="newPoll()">New Poll</button>
+   <button class="btn" onclick="newPost()">New Post</button>
+  </div>
+ </div>
 
-    ${posts.length?posts.map(p=>`
-      <div class="card">
-        <h3>${esc(p.title)}</h3>
-        <div class="tiny muted">${esc(pname(p.author_id))}</div>
-        <p>${esc(p.body)}</p>
+ ${posts.length?posts.map(p=>{
+  const opts=D.pollOptions.filter(o=>o.post_id===p.id).sort((a,b)=>a.position-b.position);
+  const votes=D.pollVotes.filter(v=>v.post_id===p.id);
+  const myVote=votes.find(v=>v.player_id===session);
 
-        ${D.comments.filter(c=>c.post_id===p.id).map(c=>`
-          <div class="item">
-            <b>${esc(pname(c.author_id))}</b>
-            <div>${esc(c.body)}</div>
-          </div>`).join("")}
+  return `<div class="card">
+   <h3>${esc(p.title)}</h3>
+   <div class="tiny muted">${esc(pname(p.author_id))}</div>
+   <p>${esc(p.body)}</p>
 
-        <div class="row">
-          <input id="c_${p.id}" placeholder="Add a comment">
-          <button class="btn ghost sm" onclick="addComment('${p.id}')">Reply</button>
-        </div>
-      </div>`).join(""):
-      `<div class="card">No posts yet.</div>`
-    }`;
+   ${p.is_poll?opts.map(o=>{
+    const n=votes.filter(v=>v.option_id===o.id).length;
+    return `<div class="item row between">
+     <span>${esc(o.option_text)} — ${n} vote${n===1?"":"s"}</span>
+     <button class="btn ${myVote?.option_id===o.id?"ok":"ghost"} sm" onclick="votePoll('${p.id}','${o.id}')">
+      ${myVote?.option_id===o.id?"Voted":"Vote"}
+     </button>
+    </div>`;
+   }).join(""):""}
+
+   ${D.comments.filter(c=>c.post_id===p.id).map(c=>`
+    <div class="item"><b>${esc(pname(c.author_id))}</b><div>${esc(c.body)}</div></div>
+   `).join("")}
+
+   <div class="row">
+    <input id="c_${p.id}" placeholder="Add a comment">
+    <button class="btn ghost sm" onclick="addComment('${p.id}')">Reply</button>
+   </div>
+  </div>`;
+ }).join(""):`<div class="card">No posts yet.</div>`}`;
 }
 
 function newPost(){
-  const title=prompt("Post title:");
-  if(!title)return;
-  const body=prompt("Message:");
-  if(body===null)return;
-  savePost(title,body);
+ const title=prompt("Post title:");
+ if(!title)return;
+ const body=prompt("Message:");
+ if(body===null)return;
+ savePost(title,body);
 }
 
 async function savePost(title,body){
-  const {error}=await sb.from("wpbl_v2_posts").insert({
-    author_id:session,
-    title,
-    body,
-    is_poll:false
-  });
-  if(error)toast(error.message);
-  else await reload();
+ const{error}=await sb.from("wpbl_v2_posts").insert({
+  author_id:session,title,body,is_poll:false
+ });
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function newPoll(){
+ const title=prompt("Poll question:");
+ if(!title)return;
+
+ const raw=prompt("Enter choices separated by commas:");
+ if(!raw)return;
+
+ const options=raw.split(",").map(x=>x.trim()).filter(Boolean);
+ if(options.length<2)return toast("Enter at least two choices.");
+
+ const{data,error}=await sb.from("wpbl_v2_posts")
+  .insert({author_id:session,title,body:"",is_poll:true})
+  .select()
+  .single();
+
+ if(error)return toast(error.message);
+
+ const rows=options.map((option_text,i)=>({
+  post_id:data.id,
+  option_text,
+  position:i+1
+ }));
+
+ const r=await sb.from("wpbl_v2_poll_options").insert(rows);
+ if(r.error)toast(r.error.message);
+ else await reload();
+}
+
+async function votePoll(post,option){
+ const{error}=await sb.rpc("wpbl_v2_vote",{
+  p_post:post,
+  p_option:option
+ });
+ if(error)toast(error.message);
+ else await reload();
 }
 
 async function addComment(id){
-  const input=$("#c_"+id);
-  const body=input.value.trim();
-  if(!body)return;
+ const input=$("#c_"+id);
+ const body=input.value.trim();
+ if(!body)return;
 
-  const {error}=await sb.from("wpbl_v2_comments").insert({
-    post_id:id,
-    author_id:session,
-    body
-  });
+ const{error}=await sb.from("wpbl_v2_comments").insert({
+  post_id:id,
+  author_id:session,
+  body
+ });
 
-  if(error)toast(error.message);
-  else await reload();
+ if(error)toast(error.message);
+ else await reload();
 }
 
 function profileView(el){
-  el.innerHTML=`
-    <h1>Profile</h1>
-    <div class="card">
-      <h2>${esc(pname(session))}</h2>
-      <span class="badge ${isAdmin()?"red":""}">${isAdmin()?"Administrator":"Player"}</span>
-      ${me()?.is_substitute?` <span class="badge warn">Substitute</span>`:""}
-      <p class="muted">${esc(me()?.email||"")}</p>
-      <button class="btn ghost" onclick="logout()">Sign Out</button>
-    </div>`;
+ el.innerHTML=`
+ <h1>Profile</h1>
+ <div class="card">
+  <h2>${esc(pname(session))}</h2>
+  <span class="badge ${isAdmin()?"red":""}">${isAdmin()?"Administrator":"Player"}</span>
+  ${me()?.is_substitute?` <span class="badge warn">Substitute</span>`:""}
+  <p class="muted">${esc(me()?.email||"")}</p>
+  <button class="btn ghost" onclick="logout()">Sign Out</button>
+ </div>`;
 }
 
 function moreView(el){
-  el.innerHTML=`
-    <h1>More</h1>
-    <div class="grid grid2">
-      <button class="card" onclick="go('board')" style="text-align:left">
-        <h3>💬 Message Board</h3>
-        <span class="muted">Shared posts and comments</span>
-      </button>
-
-      <button class="card" onclick="go('profile')" style="text-align:left">
-        <h3>👤 Profile</h3>
-        <span class="muted">Your account</span>
-      </button>
-
-      ${isAdmin()?`
-        <button class="card" onclick="go('admin')" style="text-align:left">
-          <h3>🛡 Admin</h3>
-          <span class="muted">League management</span>
-        </button>`:""}
-    </div>`;
+ el.innerHTML=`
+ <h1>More</h1>
+ <div class="grid grid2">
+  <button class="card" onclick="go('board')" style="text-align:left">
+   <h3>💬 Message Board</h3><span class="muted">Posts, comments and polls</span>
+  </button>
+  <button class="card" onclick="go('playoffs')" style="text-align:left">
+   <h3>🏆 Playoffs</h3><span class="muted">Bracket and postseason</span>
+  </button>
+  <button class="card" onclick="go('profile')" style="text-align:left">
+   <h3>👤 Profile</h3><span class="muted">Your account</span>
+  </button>
+  ${isAdmin()?`
+   <button class="card" onclick="go('teams')" style="text-align:left">
+    <h3>👥 Teams</h3><span class="muted">Fixed-team setup</span>
+   </button>
+   <button class="card" onclick="go('admin')" style="text-align:left">
+    <h3>🛡 Admin</h3><span class="muted">League management</span>
+   </button>`:""}
+ </div>`;
 }
 
-  function adminView(el){
-  if(!isAdmin()){
-    go("home");
-    return;
-  }
+function playoffsView(el){
+ const s=season();
+ const ms=D.playoffs.filter(x=>x.season_id===s?.id).sort((a,b)=>a.round-b.round||a.position-b.position);
 
-  const s=season();
+ el.innerHTML=`
+ <div class="row between">
+  <div><h1>Playoffs</h1><p class="sub">${s?.playoffs?"Enabled":"Disabled"}</p></div>
+  ${isAdmin()&&s?.playoffs?`<button class="btn" onclick="generatePlayoffs()">Generate Bracket</button>`:""}
+ </div>
 
-  el.innerHTML=`
-    <h1>Admin</h1>
-    <p class="sub">League management</p>
+ ${ms.length?ms.map(m=>`
+ <div class="card">
+  <span class="badge">Round ${m.round}</span>
+  <h3>${m.seed_a?`#${m.seed_a} `:""}${esc(pname(m.player_a))}
+   vs ${m.seed_b?`#${m.seed_b} `:""}${esc(pname(m.player_b))}</h3>
+ </div>`).join(""):`<div class="card">No playoff bracket yet.</div>`}`;
+}
 
-    <div class="card">
-      <h2>Season Settings</h2>
+async function generatePlayoffs(){
+ const s=season();
+ const n=Math.min(Number(s.playoff_qualifiers||4),standingsData().length);
+ if(n<2)return toast("Not enough players.");
 
-      <div class="field">
-        <label>Season name</label>
-        <input id="adminSeasonName" value="${esc(s?.name||"")}">
-      </div>
+ await sb.from("wpbl_v2_playoff_matches").delete().eq("season_id",s.id);
 
-      <br>
+ const top=standingsData().slice(0,n);
+ const rows=[];
 
-      <div class="field">
-        <label>League format</label>
-        <select id="adminFormat">
-          <option value="individual" ${s?.format==="individual"?"selected":""}>
-            Individual / Rotating Partners
-          </option>
-          <option value="fixed" ${s?.format==="fixed"?"selected":""}>
-            Fixed Teams
-          </option>
-        </select>
-      </div>
+ for(let i=0;i<Math.floor(n/2);i++){
+  rows.push({
+   season_id:s.id,
+   round:1,
+   position:i+1,
+   seed_a:i+1,
+   seed_b:n-i,
+   player_a:top[i].id,
+   player_b:top[n-1-i].id,
+   status:"scheduled"
+  });
+ }
 
-      <br>
+ const{error}=await sb.from("wpbl_v2_playoff_matches").insert(rows);
+ if(error)toast(error.message);
+ else await reload();
+}
 
-      <div class="grid grid2">
-        <div class="field">
-          <label>Games per pairing</label>
-          <input id="adminGames" type="number" value="${s?.games_per_pair||2}">
-        </div>
+function playerOptions(){
+ return splayers().map(id=>`<option value="${id}">${esc(pname(id))}</option>`).join("");
+}
 
-        <div class="field">
-          <label>Play to</label>
-          <input id="adminTarget" type="number" value="${s?.target||11}">
-        </div>
+function teamsView(el){
+ const s=season();
+ const ts=D.teams.filter(t=>t.season_id===s?.id&&t.active);
 
-        <div class="field">
-          <label>Win by</label>
-          <input id="adminWinBy" type="number" value="${s?.win_by||2}">
-        </div>
+ el.innerHTML=`
+ <h1>Fixed Teams</h1>
 
-        <div class="field">
-          <label>RSVP days before</label>
-          <input id="adminRsvp" type="number" value="${s?.rsvp_days||2}">
-        </div>
-      </div>
+ <div class="card">
+  <h3>Create Team</h3>
+  <div class="grid grid2">
+   <select id="t1">${playerOptions()}</select>
+   <select id="t2">${playerOptions()}</select>
+  </div><br>
+  <input id="tname" placeholder="Optional team name"><br><br>
+  <button class="btn" onclick="createTeam()">Create Team</button>
+ </div>
 
-      <br>
+ ${ts.map(t=>`
+ <div class="card">
+  <h3>${esc(t.name||teamText([t.player1,t.player2]))}</h3>
+  <div>${esc(pname(t.player1))} & ${esc(pname(t.player2))}</div><br>
+  <button class="btn red sm" onclick="deleteTeam('${t.id}')">Remove</button>
+ </div>`).join("")}`;
+}
 
-      <button class="btn" onclick="saveAdminSettings()">
-        Save Settings
-      </button>
+async function createTeam(){
+ const p1=$("#t1").value;
+ const p2=$("#t2").value;
+
+ if(!p1||!p2||p1===p2)return toast("Choose two different players.");
+
+ const{error}=await sb.from("wpbl_v2_teams").insert({
+  season_id:season().id,
+  name:$("#tname").value.trim()||null,
+  player1:p1,
+  player2:p2,
+  active:true
+ });
+
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function deleteTeam(id){
+ const{error}=await sb.from("wpbl_v2_teams").update({active:false}).eq("id",id);
+ if(error)toast(error.message);
+ else await reload();
+}
+
+function adminView(el){
+ if(!isAdmin())return go("home");
+
+ const s=season();
+ const ws=weeks();
+
+ el.innerHTML=`
+ <h1>Admin</h1>
+ <p class="sub">League management</p>
+
+ <div class="card">
+  <h2>Share Join Link</h2>
+  <div class="notice">${JOIN_URL}</div><br>
+  <button class="btn" onclick="copyJoin()">Copy Join Link</button>
+ </div>
+
+ <div class="card">
+  <h2>Season Settings</h2>
+
+  <div class="field">
+   <label>Season name</label>
+   <input id="adminSeasonName" value="${esc(s?.name||"")}">
+  </div><br>
+
+  <div class="field">
+   <label>League format</label>
+   <select id="adminFormat">
+    <option value="individual" ${s?.format==="individual"?"selected":""}>Individual / Rotating Partners</option>
+    <option value="fixed" ${s?.format==="fixed"?"selected":""}>Fixed Teams</option>
+   </select>
+  </div><br>
+
+  <div class="grid grid2">
+   <div class="field"><label>Games per pairing</label><input id="adminGames" type="number" value="${s?.games_per_pair||2}"></div>
+   <div class="field"><label>Play to</label><input id="adminTarget" type="number" value="${s?.target||11}"></div>
+   <div class="field"><label>Win by</label><input id="adminWinBy" type="number" value="${s?.win_by||2}"></div>
+   <div class="field"><label>Best of</label><input id="adminBestOf" type="number" value="${s?.best_of||1}"></div>
+   <div class="field"><label>RSVP days before</label><input id="adminRsvp" type="number" value="${s?.rsvp_days||2}"></div>
+   <div class="field"><label>Game minutes</label><input id="adminMinutes" type="number" value="${s?.game_minutes||18}"></div>
+   <div class="field"><label>Playoff qualifiers</label><input id="adminQualifiers" type="number" value="${s?.playoff_qualifiers||4}"></div>
+  </div><br>
+
+  <label>
+   <input id="adminPlayoffs" type="checkbox" style="width:auto" ${s?.playoffs?"checked":""}>
+   Playoffs enabled
+  </label><br><br>
+
+  <button class="btn" onclick="saveAdminSettings()">Save Settings</button>
+ </div>
+
+ <div class="card">
+  <h2>Create League Week</h2>
+  <div class="grid grid2">
+   <div class="field">
+    <label>Week number</label>
+    <input id="adminWeekNumber" type="number" value="${Math.max(0,...ws.map(w=>w.number))+1}">
+   </div>
+   <div class="field">
+    <label>Game date</label>
+    <input id="adminWeekDate" type="date">
+   </div>
+  </div><br>
+  <button class="btn" onclick="createAdminWeek()">Create Week</button>
+ </div>
+
+ ${ws.map(w=>`
+ <div class="card">
+  <div class="row between">
+   <div>
+    <h3>Week ${w.number} — ${fmtDate(w.game_date)}</h3>
+    <div class="tiny muted">
+     ${gamesFor(w.id).length} games •
+     ${D.availability.filter(a=>a.week_id===w.id&&a.status==="in").length} playing •
+     ${D.availability.filter(a=>a.week_id===w.id&&a.status==="out").length} out
     </div>
+   </div>
+   <div class="row">
+    <button class="btn ghost sm" onclick="toggleRsvp('${w.id}',${!w.rsvp_reopened})">
+     ${w.rsvp_reopened?"Close RSVP":"Reopen RSVP"}
+    </button>
+    <button class="btn sm" onclick="generateWeek('${w.id}')">Generate Matchups</button>
+   </div>
+  </div>
+ </div>`).join("")}
 
-    <div class="card">
-      <h2>Create League Week</h2>
+ <div class="card">
+  <h2>Current Players</h2>
 
-      <div class="grid grid2">
-        <div class="field">
-          <label>Week number</label>
-          <input id="adminWeekNumber" type="number"
-            value="${Math.max(0,...D.weeks.filter(w=>w.season_id===s?.id).map(w=>w.number))+1}">
-        </div>
+  ${D.profiles.map(p=>`
+  <div class="item">
+   <b>${esc(pname(p.id))}</b>
+   <div class="tiny muted">
+    ${esc(p.email||"")} • ${esc(p.role||"member")}
+    ${p.is_substitute?" • Substitute":""}
+    ${p.active===false?" • Inactive":""}
+   </div><br>
 
-        <div class="field">
-          <label>Game date</label>
-          <input id="adminWeekDate" type="date">
-        </div>
-      </div>
+   <div class="row">
+    <button class="btn ghost sm"
+     onclick="setPlayer('${p.id}',${!p.is_substitute},${p.role==="admin"},${p.active!==false})">
+     ${p.is_substitute?"Remove Sub":"Make Sub"}
+    </button>
 
-      <br>
+    <button class="btn ghost sm"
+     onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role!=="admin"},${p.active!==false})">
+     ${p.role==="admin"?"Remove Admin":"Make Admin"}
+    </button>
 
-      <button class="btn" onclick="createAdminWeek()">
-        Create Week
-      </button>
-    </div>
+    <button class="btn ${p.active===false?"ok":"red"} sm"
+     onclick="setPlayer('${p.id}',${!!p.is_substitute},${p.role==="admin"},${p.active===false})">
+     ${p.active===false?"Activate":"Deactivate"}
+    </button>
+   </div>
+  </div>`).join("")}
+ </div>`;
+}
 
-    <div class="card">
-      <h2>Invite Player</h2>
-
-      <div class="grid grid2">
-        <div class="field">
-          <label>First name</label>
-          <input id="inviteFirst">
-        </div>
-
-        <div class="field">
-          <label>Last name</label>
-          <input id="inviteLast">
-        </div>
-      </div>
-
-      <br>
-
-      <div class="field">
-        <label>Email</label>
-        <input id="inviteEmail" type="email">
-      </div>
-
-      <br>
-
-      <label>
-        <input id="inviteSub" type="checkbox" style="width:auto">
-        Substitute player
-      </label>
-
-      <br><br>
-
-      <button class="btn" onclick="invitePlayer()">
-        Send Invitation
-      </button>
-
-      <p id="inviteStatus" class="tiny muted"></p>
-    </div>
-
-    <div class="card">
-      <h2>Current Players</h2>
-
-      ${D.profiles.map(p=>`
-        <div class="item">
-          <b>${esc(pname(p.id))}</b>
-          <div class="tiny muted">
-            ${esc(p.email||"")} • ${esc(p.role||"member")}
-            ${p.is_substitute?" • Substitute":""}
-          </div>
-        </div>
-      `).join("")}
-    </div>
-  `;
+function copyJoin(){
+ navigator.clipboard?.writeText(JOIN_URL)
+  .then(()=>toast("Join link copied."))
+  .catch(()=>prompt("Copy this link:",JOIN_URL));
 }
 
 async function saveAdminSettings(){
-  const s=season();
+ const s=season();
 
-  const {error}=await sb
-    .from("wpbl_v2_seasons")
-    .update({
-      name:$("#adminSeasonName").value.trim(),
-      format:$("#adminFormat").value,
-      games_per_pair:Number($("#adminGames").value),
-      target:Number($("#adminTarget").value),
-      win_by:Number($("#adminWinBy").value),
-      rsvp_days:Number($("#adminRsvp").value)
-    })
-    .eq("id",s.id);
+ const payload={
+  name:$("#adminSeasonName").value.trim(),
+  format:$("#adminFormat").value,
+  games_per_pair:Number($("#adminGames").value),
+  target:Number($("#adminTarget").value),
+  win_by:Number($("#adminWinBy").value),
+  best_of:Number($("#adminBestOf").value),
+  rsvp_days:Number($("#adminRsvp").value),
+  game_minutes:Number($("#adminMinutes").value),
+  playoffs:$("#adminPlayoffs").checked,
+  playoff_qualifiers:Number($("#adminQualifiers").value)
+ };
 
-  if(error){
-    toast(error.message);
-    return;
-  }
+ const{error}=await sb.from("wpbl_v2_seasons").update(payload).eq("id",s.id);
 
-  await reload();
-  view="admin";
-  render();
+ if(error)toast(error.message);
+ else await reload();
 }
 
 async function createAdminWeek(){
-  const s=season();
+ const s=season();
+ const number=Number($("#adminWeekNumber").value);
+ const game_date=$("#adminWeekDate").value;
 
-  const number=Number($("#adminWeekNumber").value);
-  const game_date=$("#adminWeekDate").value;
+ if(!number||!game_date)return toast("Enter a week number and game date.");
 
-  if(!number || !game_date){
-    toast("Enter a week number and game date.");
-    return;
-  }
+ const{error}=await sb.from("wpbl_v2_weeks").insert({
+  season_id:s.id,
+  number,
+  game_date,
+  rsvp_reopened:false
+ });
 
-  const {error}=await sb
-    .from("wpbl_v2_weeks")
-    .insert({
-      season_id:s.id,
-      number,
-      game_date,
-      rsvp_reopened:false
-    });
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  await reload();
-  view="admin";
-  render();
+ if(error)toast(error.message);
+ else await reload();
 }
 
-async function invitePlayer(){
-  const first_name=$("#inviteFirst").value.trim();
-  const last_name=$("#inviteLast").value.trim();
-  const email=$("#inviteEmail").value.trim().toLowerCase();
-  const is_substitute=$("#inviteSub").checked;
-  const status=$("#inviteStatus");
-
-  if(!first_name || !last_name || !email){
-    status.textContent="First name, last name and email are required.";
-    return;
-  }
-
-  status.textContent="Creating invitation...";
-
-  const {error:inviteError}=await sb
-    .from("wpbl_v2_invites")
-    .insert({
-      email,
-      first_name,
-      last_name,
-      role:"member",
-      is_substitute,
-      invited_by:session,
-      active:true
-    });
-
-  if(inviteError){
-    status.textContent=inviteError.message;
-    return;
-  }
-
-  status.textContent="Sending invitation email...";
-
-  const {error:authError}=await sb.auth.signInWithOtp({
-    email,
-    options:{
-      shouldCreateUser:true,
-      data:{
-        first_name,
-        last_name
-      },
-      emailRedirectTo:"https://asnehpets.github.io/WPBL/"
-    }
-  });
-
-  if(authError){
-    status.textContent=authError.message;
-    return;
-  }
-
-  status.textContent="Invitation sent.";
+async function toggleRsvp(id,val){
+ const{error}=await sb.from("wpbl_v2_weeks").update({rsvp_reopened:val}).eq("id",id);
+ if(error)toast(error.message);
+ else await reload();
 }
 
-let passwordRecoveryMode =
-  window.location.hash.includes("type=recovery") ||
-  window.location.search.includes("type=recovery");
+async function generateWeek(id){
+ if(!confirm("Generate or regenerate this week's matchups? Existing games for this week will be replaced."))return;
+
+ const{error}=await sb.rpc("wpbl_v2_generate_week",{p_week_id:id});
+
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function setPlayer(id,sub,admin,active){
+ const{error}=await sb.rpc("wpbl_v2_admin_set_player",{
+  p_player:id,
+  p_sub:sub,
+  p_admin:admin,
+  p_active:active
+ });
+
+ if(error)toast(error.message);
+ else await reload();
+}
+
+let passwordRecoveryMode=
+ window.location.hash.includes("type=recovery")||
+ window.location.search.includes("type=recovery");
 
 function renderPasswordRecovery(){
-  document.getElementById("root").innerHTML=`
-    <div class="auth">
-      <div class="authbox">
-        <img class="authlogo" src="${LOGO}">
-        <h1>WPBL</h1>
-        <p class="sub">Wall Pickleball League</p>
-
-        <div class="notice">
-          Create your new WPBL password.
-        </div>
-
-        <br>
-
-        <div class="field">
-          <label>New Password</label>
-          <input id="newPassword" type="password" placeholder="New password">
-        </div>
-
-        <div class="field">
-          <label>Confirm Password</label>
-          <input id="confirmPassword" type="password" placeholder="Confirm password">
-        </div>
-
-        <br>
-
-        <button class="btn" style="width:100%" onclick="saveNewPassword()">
-          Set Password
-        </button>
-
-        <p id="recoveryMsg" class="tiny muted"></p>
-      </div>
-    </div>`;
+ document.getElementById("root").innerHTML=`
+ <div class="auth"><div class="authbox">
+ <img class="authlogo" src="${LOGO}">
+ <h1>WPBL</h1>
+ <p class="sub">Create your new WPBL password.</p>
+ <div class="field"><label>New Password</label><input id="newPassword" type="password"></div>
+ <div class="field"><label>Confirm Password</label><input id="confirmPassword" type="password"></div>
+ <br>
+ <button class="btn" style="width:100%" onclick="saveNewPassword()">Set Password</button>
+ <p id="recoveryMsg" class="tiny muted"></p>
+ </div></div>`;
 }
 
 async function saveNewPassword(){
-  const password=$("#newPassword").value;
-  const confirm=$("#confirmPassword").value;
-  const msg=$("#recoveryMsg");
+ const password=$("#newPassword").value;
+ const confirm=$("#confirmPassword").value;
+ const msg=$("#recoveryMsg");
 
-  if(password.length < 8){
-    msg.textContent="Password must be at least 8 characters.";
-    return;
-  }
+ if(password.length<8)
+  return msg.textContent="Password must be at least 8 characters.";
 
-  if(password !== confirm){
-    msg.textContent="Passwords do not match.";
-    return;
-  }
+ if(password!==confirm)
+  return msg.textContent="Passwords do not match.";
 
-  msg.textContent="Saving password...";
+ msg.textContent="Saving password...";
 
-  const {error}=await sb.auth.updateUser({
-    password:password
-  });
+ const{error}=await sb.auth.updateUser({password});
 
-  if(error){
-    msg.textContent=error.message;
-    return;
-  }
+ if(error)return msg.textContent=error.message;
 
-  passwordRecoveryMode=false;
-
-  history.replaceState(
-    {},
-    document.title,
-    window.location.pathname
-  );
-
-  await sb.auth.signOut();
-
-  renderAuth();
+ passwordRecoveryMode=false;
+ history.replaceState({},document.title,window.location.pathname);
+ await sb.auth.signOut();
+ renderAuth();
 }
 
 sb.auth.onAuthStateChange(async(event,s)=>{
-  session=s?.user?.id||"";
+ session=s?.user?.id||"";
 
-  if(event==="PASSWORD_RECOVERY"){
-    passwordRecoveryMode=true;
-    renderPasswordRecovery();
-    return;
-  }
+ if(event==="PASSWORD_RECOVERY"){
+  passwordRecoveryMode=true;
+  renderPasswordRecovery();
+  return;
+ }
 
-  if(passwordRecoveryMode){
-    if(s?.user) renderPasswordRecovery();
-    return;
-  }
+ if(passwordRecoveryMode){
+  if(s?.user)renderPasswordRecovery();
+  return;
+ }
 
-  if(event==="SIGNED_IN"){
-    const {error}=await sb.rpc("wpbl_finish_registration");
+ if(event==="SIGNED_IN"){
+  const{error}=await sb.rpc("wpbl_finish_registration");
+  if(error)console.error("WPBL registration:",error);
+  await reload();
+ }
 
-    if(error){
-      console.error("WPBL registration:",error);
-    }
-
-    await reload();
-  }
-
-  if(event==="SIGNED_OUT")renderAuth();
+ if(event==="SIGNED_OUT")renderAuth();
 });
 
 if(passwordRecoveryMode){
-  sb.auth.getSession().then(({data})=>{
-    session=data.session?.user?.id||"";
-    renderPasswordRecovery();
-  });
+ sb.auth.getSession().then(({data})=>{
+  session=data.session?.user?.id||"";
+  renderPasswordRecovery();
+ });
 }else{
-  boot();
+ boot();
 }
-  </script>
+</script>
 </body>
 </html>
