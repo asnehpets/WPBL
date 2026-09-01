@@ -209,6 +209,7 @@ function showJoinForm(){
  $("#loginBox").classList.add("hidden");
  $("#joinBox").classList.remove("hidden");
 }
+
 function showLoginForm(){
  $("#joinBox").classList.add("hidden");
  $("#loginBox").classList.remove("hidden");
@@ -328,6 +329,26 @@ function renderView(){
  else moreView(el);
 }
 
+function headToHead(a,b){
+ const s=season();
+ if(!s)return 0;
+ const weekIds=new Set(D.weeks.filter(w=>w.season_id===s.id).map(w=>w.id));
+ let aw=0,bw=0;
+
+ D.games.filter(g=>weekIds.has(g.week_id)&&g.status==="confirmed").forEach(g=>{
+  const A=g.actual_team_a||[];
+  const B=g.actual_team_b||[];
+  const opposed=(A.includes(a)&&B.includes(b))||(A.includes(b)&&B.includes(a));
+  if(!opposed)return;
+
+  const aOnA=A.includes(a);
+  const aWon=aOnA?g.score_a>g.score_b:g.score_b>g.score_a;
+  if(aWon)aw++;else bw++;
+ });
+
+ return aw-bw;
+}
+
 function standingsData(){
  const s=season();
  if(!s)return[];
@@ -358,7 +379,13 @@ function standingsData(){
 
  return Object.values(rows)
   .map(r=>({...r,pct:r.gp?r.w/r.gp:0,pd:r.pf-r.pa}))
-  .sort((a,b)=>b.pct-a.pct||b.pd-a.pd||b.w-a.w);
+  .sort((a,b)=>{
+   if(b.pct!==a.pct)return b.pct-a.pct;
+   const h=headToHead(a.id,b.id);
+   if(h!==0)return -h;
+   if(b.pd!==a.pd)return b.pd-a.pd;
+   return b.w-a.w;
+  });
 }
 
 function standingsMini(){
@@ -398,7 +425,7 @@ function homeView(el){
 function standingsView(el){
  el.innerHTML=`
  <h1>Standings</h1>
- <p class="sub">Win % → point differential → wins</p>
+ <p class="sub">Win % → head-to-head → point differential</p>
  <div class="card tablewrap">
  <table>
  <tr><th>#</th><th>Player</th><th>W-L</th><th>GP</th><th>Win%</th><th>PF</th><th>PA</th><th>+/-</th></tr>
@@ -421,8 +448,15 @@ async function setAvailability(wid,status){
   p_week_id:wid,
   p_status:status
  });
- if(error)toast(error.message);
- else await reload();
+
+ if(error)return toast(error.message);
+
+ const existing=D.availability.find(a=>a.week_id===wid&&a.player_id===session);
+ if(existing)existing.status=status;
+ else D.availability.push({week_id:wid,player_id:session,status});
+
+ render();
+ reload();
 }
 
 function scheduleView(el){
@@ -515,6 +549,10 @@ function liveView(el){
    ${canConfirm(g)?`<button class="btn ok" onclick="confirmScore('${g.id}')">Confirm Score</button>`:""}
    ${isAdmin()?` <button class="btn ghost" onclick="reopenScore('${g.id}')">Reopen / Correct</button>`:""}
   `:""}
+
+  ${isAdmin()&&g.status==="scheduled"?`
+   <br><button class="btn ghost sm" onclick="editPlayers('${g.id}')">Change Players / Substitute</button>
+  `:""}
  </div>`:
  `<div class="card"><h2>All games complete</h2></div>`}
 
@@ -532,6 +570,12 @@ function liveView(el){
    <div class="item">
     <b>Game ${x.position}</b> — ${esc(teamText(x.actual_team_a))} vs ${esc(teamText(x.actual_team_b))}
     ${x.status==="confirmed"?` • ${x.score_a}-${x.score_b}`:""}
+    ${isAdmin()&&x.status==="scheduled"?`
+     <div class="row" style="margin-top:7px">
+      <button class="btn ghost sm" onclick="moveGame('${x.id}',-1)">↑</button>
+      <button class="btn ghost sm" onclick="moveGame('${x.id}',1)">↓</button>
+      <button class="btn ghost sm" onclick="editPlayers('${x.id}')">Players/Sub</button>
+     </div>`:""}
    </div>`).join("")}
  </div>`;
 }
@@ -558,6 +602,57 @@ async function confirmScore(id){
 
 async function reopenScore(id){
  const{error}=await sb.rpc("wpbl_v2_reopen_score",{p_game_id:id});
+ if(error)toast(error.message);
+ else await reload();
+}
+
+async function moveGame(id,dir){
+ const g=D.games.find(x=>x.id===id);
+ if(!g)return;
+
+ const games=gamesFor(g.week_id);
+ const other=games.find(x=>x.position===g.position+dir);
+ if(!other)return;
+
+ const temp=100000+g.position;
+
+ let r=await sb.from("wpbl_v2_games").update({position:temp}).eq("id",g.id);
+ if(r.error)return toast(r.error.message);
+
+ r=await sb.from("wpbl_v2_games").update({position:g.position}).eq("id",other.id);
+ if(r.error)return toast(r.error.message);
+
+ r=await sb.from("wpbl_v2_games").update({position:other.position}).eq("id",g.id);
+ if(r.error)return toast(r.error.message);
+
+ await reload();
+}
+
+async function editPlayers(id){
+ const g=D.games.find(x=>x.id===id);
+ if(!g)return;
+
+ const current=[...(g.actual_team_a||[]),...(g.actual_team_b||[])];
+ const roster=splayers();
+
+ const choose=(label,currentId)=>{
+  const names=roster.map((pid,i)=>`${i+1}. ${pname(pid)}`).join("\n");
+  const currentIndex=Math.max(0,roster.indexOf(currentId))+1;
+  const n=Number(prompt(`${label}\n\n${names}`,currentIndex));
+  return roster[n-1];
+ };
+
+ const a1=choose("Team A — Player 1",current[0]); if(!a1)return;
+ const a2=choose("Team A — Player 2",current[1]); if(!a2)return;
+ const b1=choose("Team B — Player 1",current[2]); if(!b1)return;
+ const b2=choose("Team B — Player 2",current[3]); if(!b2)return;
+
+ const{error}=await sb.rpc("wpbl_v2_set_actual_players",{
+  p_game_id:id,
+  p_team_a:[a1,a2],
+  p_team_b:[b1,b2]
+ });
+
  if(error)toast(error.message);
  else await reload();
 }
